@@ -1,5 +1,5 @@
-import npm from '../adapters/npm';
-import S3 from '../adapters/s3';
+import npm from '../../adapters/npm';
+import S3 from '../../adapters/s3';
 
 export default async ({ path }, context, callback) => {
   const { registry, bucket, region } = process.env;
@@ -8,17 +8,24 @@ export default async ({ path }, context, callback) => {
 
   try {
     const body = await storage.get(`${name}/index.json`);
-
-    return callback(null, JSON.parse(body.toString()));
+    const json = JSON.parse(body.toString());
+    return callback(null, json['dist-tags']);
   } catch (storageError) {
     if (storageError.code === 'NoSuchKey') {
       try {
         const data = await npm(registry, name);
-        return callback(null, data);
-      } catch (npmError) {
-        return callback(npmError);
+        return callback(null, data['dist-tags']);
+      } catch ({ message }) {
+        return callback(null, {
+          ok: false,
+          error: message,
+        });
       }
     }
-    return callback(storageError);
+
+    return callback(null, {
+      ok: false,
+      error: storageError.message,
+    });
   }
 };

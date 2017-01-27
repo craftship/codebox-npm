@@ -27,11 +27,11 @@ provider:
         - "logs:PutLogEvents"
         - "apigateway:POST"
       Resource:
-        - "arn:aws:s3:::${self:service}*"
+        - "arn:aws:s3:::${self:custom.bucket}-${opt:stage}*"
         - "arn:aws:apigateway:*"
 
 functions:
-  packageGet:
+  get:
     handler: get.default
     environment:
       region: ${self:provider.region}
@@ -40,6 +40,18 @@ functions:
     events:
       - http:
           path: 'registry/{name}'
+          method: get
+          integration: lambda
+
+  distTagsGet:
+    handler: distTagsGet.default
+    environment:
+      region: ${self:provider.region}
+      bucket: ${self:custom.bucket}-${opt:stage}
+      registry: ${self:custom.registry}
+    events:
+      - http:
+          path: 'registry/-/package/{name}/dist-tags'
           method: get
           integration: lambda
 

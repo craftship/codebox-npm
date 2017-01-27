@@ -1,6 +1,6 @@
 const packages = {
-  foo: { name: 'foo' },
-  bar: { name: 'bar' },
+  foo: { name: 'foo', 'dist-tags': { latest: '1.0.0' } },
+  bar: { name: 'bar', 'dist-tags': { latest: '1.0.0' } },
 };
 
 export default (url) => {
