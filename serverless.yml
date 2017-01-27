@@ -1,0 +1,29 @@
+frameworkVersion: '=1.5.1'
+
+plugins:
+  - serverless-webpack
+
+service: yith
+
+custom:
+  registry: 'https://registry.npmjs.org/'
+  github: 'https://api.github.com/'
+  bucket: 'npm-registry'
+  cache: false
+
+provider:
+  name: aws
+  region: eu-central-1
+  runtime: nodejs4.3
+  stage: dev
+
+functions:
+  packageGet:
+    handler: get.default
+    environment:
+      registry: ${self:custom.registry}
+    events:
+      - http:
+          path: 'registry/{name}'
+          method: get
+          integration: lambda

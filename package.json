@@ -1,0 +1,43 @@
+{
+  "name": "yith",
+  "version": "0.7.0",
+  "description": "Serverless private npm registry",
+  "main": "index.js",
+  "devDependencies": {
+    "babel-loader": "^6.2.10",
+    "babel-polyfill": "^6.22.0",
+    "babel-preset-env": "^1.1.8",
+    "eslint": "^3.14.1",
+    "eslint-config-airbnb-base": "^11.0.1",
+    "eslint-plugin-import": "^2.2.0",
+    "jest": "^18.1.0",
+    "json-loader": "^0.5.4",
+    "nsp": "^2.6.2",
+    "serverless-webpack": "^1.0.0-rc.4"
+  },
+  "scripts": {
+    "lint": "node_modules/.bin/eslint ./src",
+    "test": "node_modules/.bin/jest --coverage",
+    "nsp": "node_modules/.bin/nsp check"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/craftship/yith.git"
+  },
+  "keywords": [
+    "yith",
+    "npm",
+    "registry",
+    "private"
+  ],
+  "author": "Craftship Ltd <hello@craftship.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/craftship/yith/issues"
+  },
+  "homepage": "https://github.com/craftship/yith#readme",
+  "dependencies": {
+    "babel-runtime": "^6.22.0",
+    "node-fetch": "^1.6.3"
+  }
+}
