@@ -16,14 +16,37 @@ provider:
   region: eu-central-1
   runtime: nodejs4.3
   stage: dev
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:ListBucket"
+        - "s3:GetObject"
+        - "s3:PutObject"
+        - "logs:CreateLogGroup"
+        - "logs:CreateLogStream"
+        - "logs:PutLogEvents"
+        - "apigateway:POST"
+      Resource:
+        - "arn:aws:s3:::${self:service}*"
+        - "arn:aws:apigateway:*"
 
 functions:
   packageGet:
     handler: get.default
     environment:
+      region: ${self:provider.region}
+      bucket: ${self:custom.bucket}-${opt:stage}
       registry: ${self:custom.registry}
     events:
       - http:
           path: 'registry/{name}'
           method: get
           integration: lambda
+
+resources:
+  Resources:
+    PackageStorage:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: Private
+        BucketName: ${self:custom.bucket}-${opt:stage}
