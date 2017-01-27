@@ -1,5 +1,6 @@
 const packages = {
   foo: { name: 'foo' },
+  bar: { name: 'bar' },
 };
 
 export default (url) => {
@@ -12,4 +13,3 @@ export default (url) => {
     json: () => Promise.resolve(pkg),
   };
 };
-

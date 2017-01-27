@@ -3,7 +3,7 @@ var path = require('path');
 module.exports = {
   target: 'node',
   entry: {
-    get: './src/get/index.js'
+    get: ['babel-polyfill', './src/get/index.js'],
   },
   output: {
     libraryTarget: 'commonjs',
@@ -21,5 +21,5 @@ module.exports = {
       test: /\.json$/,
       loader: 'json-loader'
     }]
-  }
+  },
 };
