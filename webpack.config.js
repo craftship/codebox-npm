@@ -11,6 +11,7 @@ module.exports = {
     distTagsPut: ['./boostrap', './src/dist-tags/put.js'],
     distTagsDelete: ['./boostrap', './src/dist-tags/delete.js'],
     userPut: ['./boostrap', './src/user/put.js'],
+    tarGet: ['./boostrap', './src/tar/get.js'],
   },
   output: {
     libraryTarget: 'commonjs',
