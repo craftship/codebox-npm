@@ -58,6 +58,13 @@ functions:
           path: 'registry/-/package/{name}/dist-tags/{tag}'
           method: delete
 
+  userPut:
+    handler: userPut.default
+    events:
+      - http:
+          path: 'registry/-/user/{id}'
+          method: put
+
 resources:
   Resources:
     PackageStorage:
@@ -65,3 +72,6 @@ resources:
       Properties:
         AccessControl: Private
         BucketName: ${self:provider.environment.bucket}
+
+custom:
+  webpackIncludeModules: true
