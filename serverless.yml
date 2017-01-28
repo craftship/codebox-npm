@@ -5,17 +5,18 @@ plugins:
 
 service: yith
 
-custom:
-  registry: 'https://registry.npmjs.org/'
-  github: 'https://api.github.com/'
-  bucket: 'npm-registry'
-  cache: false
-
 provider:
   name: aws
   region: eu-central-1
   runtime: nodejs4.3
   stage: dev
+  environment:
+    registry: ${env:YITH_REGISTRY}
+    githubUrl: ${env:YITH_GITHUB_URL}
+    githubClientId:  ${env:YITH_GITHUB_CLIENT_ID}
+    githubSecret:  ${env:YITH_GITHUB_SECRET}
+    bucket: ${env:YITH_BUCKET}-${opt:stage}
+    region: ${self:provider.region}
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -27,16 +28,12 @@ provider:
         - "logs:PutLogEvents"
         - "apigateway:POST"
       Resource:
-        - "arn:aws:s3:::${self:custom.bucket}-${opt:stage}*"
+        - "arn:aws:s3:::${self:provider.environment.bucket}*"
         - "arn:aws:apigateway:*"
 
 functions:
   get:
     handler: get.default
-    environment:
-      region: ${self:provider.region}
-      bucket: ${self:custom.bucket}-${opt:stage}
-      registry: ${self:custom.registry}
     events:
       - http:
           path: 'registry/{name}'
@@ -44,30 +41,18 @@ functions:
 
   distTagsGet:
     handler: distTagsGet.default
-    environment:
-      region: ${self:provider.region}
-      bucket: ${self:custom.bucket}-${opt:stage}
-      registry: ${self:custom.registry}
     events:
       - http:
           path: 'registry/-/package/{name}/dist-tags'
           method: get
   distTagsPut:
     handler: distTagsPut.default
-    environment:
-      region: ${self:provider.region}
-      bucket: ${self:custom.bucket}-${opt:stage}
-      registry: ${self:custom.registry}
     events:
       - http:
           path: 'registry/-/package/{name}/dist-tags/{tag}'
           method: put
   distTagsDelete:
     handler: distTagsDelete.default
-    environment:
-      region: ${self:provider.region}
-      bucket: ${self:custom.bucket}-${opt:stage}
-      registry: ${self:custom.registry}
     events:
       - http:
           path: 'registry/-/package/{name}/dist-tags/{tag}'
@@ -79,4 +64,4 @@ resources:
       Type: AWS::S3::Bucket
       Properties:
         AccessControl: Private
-        BucketName: ${self:custom.bucket}-${opt:stage}
+        BucketName: ${self:provider.environment.bucket}
