@@ -7,9 +7,9 @@ export default async ({ path }, context, callback) => {
   const storage = new S3({ region, bucket });
 
   try {
-    const body = await storage.get(`${name}/index.json`);
+    const pkgBuffer = await storage.get(`${name}/index.json`);
 
-    return callback(null, JSON.parse(body.toString()));
+    return callback(null, JSON.parse(pkgBuffer.toString()));
   } catch (storageError) {
     if (storageError.code === 'NoSuchKey') {
       try {

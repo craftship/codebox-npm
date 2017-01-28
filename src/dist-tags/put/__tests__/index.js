@@ -3,7 +3,7 @@ jest.mock('aws-sdk');
 
 const handler = require('../');
 
-describe('DELETE registry/-/package/{name}/dist-tags/{tag}', () => {
+describe('PUT registry/-/package/{name}/dist-tags/{tag}', () => {
   let callback;
   let subject;
 
@@ -24,8 +24,9 @@ describe('DELETE registry/-/package/{name}/dist-tags/{tag}', () => {
       event = {
         path: {
           name: 'private-foo',
-          tag: 'latest',
+          tag: 'newtag',
         },
+        body: '2.0.0',
       };
     });
 
@@ -36,7 +37,10 @@ describe('DELETE registry/-/package/{name}/dist-tags/{tag}', () => {
       .toHaveBeenCalledWith(null, {
         ok: true,
         id: 'private-foo',
-        'dist-tags': {},
+        'dist-tags': {
+          latest: '1.0.0',
+          newtag: '2.0.0',
+        },
       });
     });
   });
