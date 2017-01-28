@@ -6,7 +6,6 @@
   "devDependencies": {
     "aws-sdk": "^2.7.10",
     "babel-loader": "^6.2.10",
-    "babel-polyfill": "^6.22.0",
     "babel-preset-env": "^1.1.8",
     "eslint": "^3.14.1",
     "eslint-config-airbnb-base": "^11.0.1",
@@ -14,7 +13,8 @@
     "jest": "^18.1.0",
     "json-loader": "^0.5.4",
     "nsp": "^2.6.2",
-    "serverless-webpack": "^1.0.0-rc.4"
+    "serverless-webpack": "^1.0.0-rc.4",
+    "webpack-node-externals": "^1.5.4"
   },
   "scripts": {
     "lint": "node_modules/.bin/eslint ./src",
@@ -39,6 +39,8 @@
   "homepage": "https://github.com/craftship/yith#readme",
   "dependencies": {
     "babel-runtime": "^6.22.0",
+    "babel-polyfill": "^6.22.0",
+    "github": "^8.1.1",
     "node-fetch": "^1.6.3"
   }
 }
