@@ -8,10 +8,10 @@ export default async ({ pathParameters }, context, callback) => {
 
   try {
     const pkgBuffer = await storage.get(`${name}/index.json`);
-
+    const json = JSON.parse(pkgBuffer.toString());
     return callback(null, {
       statusCode: 200,
-      body: pkgBuffer.toString(),
+      body: JSON.stringify(json['dist-tags']),
     });
   } catch (storageError) {
     if (storageError.code === 'NoSuchKey') {
@@ -19,13 +19,14 @@ export default async ({ pathParameters }, context, callback) => {
         const data = await npm(registry, name);
         return callback(null, {
           statusCode: 200,
-          body: JSON.stringify(data),
+          body: JSON.stringify(data['dist-tags']),
         });
-      } catch (npmError) {
+      } catch ({ message }) {
         return callback(null, {
-          statusCode: npmError.status,
+          statusCode: 404,
           body: JSON.stringify({
-            error: npmError.message,
+            ok: false,
+            error: message,
           }),
         });
       }
@@ -34,6 +35,7 @@ export default async ({ pathParameters }, context, callback) => {
     return callback(null, {
       statusCode: 500,
       body: JSON.stringify({
+        ok: false,
         error: storageError.message,
       }),
     });

@@ -1,9 +1,9 @@
 jest.mock('node-fetch');
 jest.mock('aws-sdk');
 
-const handler = require('../');
+const handler = require('../get');
 
-describe('/registry/{name}', () => {
+describe('GET /registry/{name}', () => {
   let callback;
   let subject;
 

@@ -3,10 +3,10 @@ var path = require('path');
 module.exports = {
   target: 'node',
   entry: {
-    get: ['./boostrap', './src/get/index.js'],
-    distTagsGet: ['./boostrap', './src/dist-tags/get/index.js'],
-    distTagsPut: ['./boostrap', './src/dist-tags/put/index.js'],
-    distTagsDelete: ['./boostrap', './src/dist-tags/delete/index.js'],
+    get: ['./boostrap', './src/get.js'],
+    distTagsGet: ['./boostrap', './src/dist-tags/get.js'],
+    distTagsPut: ['./boostrap', './src/dist-tags/put.js'],
+    distTagsDelete: ['./boostrap', './src/dist-tags/delete.js'],
   },
   output: {
     libraryTarget: 'commonjs',
