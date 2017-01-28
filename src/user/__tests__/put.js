@@ -76,7 +76,7 @@ describe('PUT /registry/-/user/{id}', () => {
 
       expect(callback)
       .toHaveBeenCalledWith(null, {
-        statusCode: 500,
+        statusCode: 403,
         body: JSON.stringify({
           ok: false,
           error: 'Error occured creating token.',

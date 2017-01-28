@@ -65,7 +65,7 @@ export default async ({ body }, context, callback) => {
     });
   } catch (error) {
     return callback(null, {
-      statusCode: 500,
+      statusCode: 403,
       body: JSON.stringify({
         ok: false,
         error: error.message,
