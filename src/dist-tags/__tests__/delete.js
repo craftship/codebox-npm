@@ -1,9 +1,9 @@
 jest.mock('node-fetch');
 jest.mock('aws-sdk');
 
-const handler = require('../');
+const handler = require('../delete');
 
-describe('PUT registry/-/package/{name}/dist-tags/{tag}', () => {
+describe('DELETE registry/-/package/{name}/dist-tags/{tag}', () => {
   let callback;
   let subject;
 
@@ -24,23 +24,19 @@ describe('PUT registry/-/package/{name}/dist-tags/{tag}', () => {
       event = {
         path: {
           name: 'private-foo',
-          tag: 'newtag',
+          tag: 'latest',
         },
-        body: '2.0.0',
       };
     });
 
-    it('should add tag and reuturn updated package json', async () => {
+    it('should remove dist-tag and return updated package json', async () => {
       await subject(event, jest.fn(), callback);
 
       expect(callback)
       .toHaveBeenCalledWith(null, {
         ok: true,
         id: 'private-foo',
-        'dist-tags': {
-          latest: '1.0.0',
-          newtag: '2.0.0',
-        },
+        'dist-tags': {},
       });
     });
   });

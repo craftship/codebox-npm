@@ -1,7 +1,7 @@
 jest.mock('node-fetch');
 jest.mock('aws-sdk');
 
-const handler = require('../');
+const handler = require('../get');
 
 describe('GET /registry/-/package/{name}/dist-tags', () => {
   let callback;
