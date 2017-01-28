@@ -26,7 +26,7 @@ describe('PUT registry/-/package/{name}/dist-tags/{tag}', () => {
           name: 'private-foo',
           tag: 'newtag',
         },
-        body: '2.0.0',
+        body: '"2.0.0"',
       };
     });
 
