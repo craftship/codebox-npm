@@ -32,6 +32,12 @@ provider:
         - "arn:aws:apigateway:*"
 
 functions:
+  put:
+    handler: put.default
+    events:
+      - http:
+          path: 'registry/{name}'
+          method: put
   get:
     handler: get.default
     events:
