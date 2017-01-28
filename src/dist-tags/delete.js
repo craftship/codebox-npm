@@ -1,6 +1,6 @@
-import S3 from '../../adapters/s3';
+import S3 from '../adapters/s3';
 
-export default async ({ body, pathParameters }, context, callback) => {
+export default async ({ pathParameters }, context, callback) => {
   const { bucket, region } = process.env;
   const name = `${decodeURIComponent(pathParameters.name)}`;
   const storage = new S3({ region, bucket });
@@ -8,7 +8,7 @@ export default async ({ body, pathParameters }, context, callback) => {
   try {
     const pkgBuffer = await storage.get(`${name}/index.json`);
     const json = JSON.parse(pkgBuffer.toString());
-    json['dist-tags'][pathParameters.tag] = body;
+    delete json['dist-tags'][pathParameters.tag];
 
     await storage.put(
       `${name}/index.json`,
