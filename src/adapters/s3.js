@@ -10,6 +10,13 @@ export default class Storage {
     });
   }
 
+  async put(key, data, encoding) {
+    return this.S3.putObject({
+      Key: key,
+      Body: encoding === 'base64' ? new Buffer(data, 'base64') : data,
+    }).promise();
+  }
+
   async get(key) {
     const meta = await this.S3.getObject({
       Key: key,

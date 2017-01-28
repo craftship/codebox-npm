@@ -5,6 +5,7 @@ module.exports = {
   entry: {
     get: ['./boostrap', './src/get/index.js'],
     distTagsGet: ['./boostrap', './src/dist-tags/get/index.js'],
+    distTagsDelete: ['./boostrap', './src/dist-tags/delete/index.js'],
   },
   output: {
     libraryTarget: 'commonjs',
