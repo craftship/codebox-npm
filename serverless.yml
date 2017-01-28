@@ -71,6 +71,13 @@ functions:
           path: 'registry/-/user/{id}'
           method: put
 
+  tarGet:
+    handler: tarGet.default
+    events:
+      - http:
+          path: 'registry/{name}/-/{tar}'
+          method: get
+
 resources:
   Resources:
     PackageStorage:

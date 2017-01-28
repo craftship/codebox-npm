@@ -4,29 +4,38 @@ import S3 from '../adapters/s3';
 export default async ({ pathParameters }, context, callback) => {
   const { registry, bucket, region } = process.env;
   const name = `${decodeURIComponent(pathParameters.name)}`;
+  const tarName = `${decodeURIComponent(pathParameters.tar)}`;
   const storage = new S3({ region, bucket });
 
   try {
-    const pkgBuffer = await storage.get(`${name}/index.json`);
-    const json = JSON.parse(pkgBuffer.toString());
+    const fileName = tarName.replace(`${name}-`, '');
+    const pkgBuffer = await storage.get(`${name}/${fileName}`);
+
     return callback(null, {
       statusCode: 200,
-      body: JSON.stringify(json['dist-tags']),
+      headers: {
+        'Content-Type': 'application/x-tar',
+      },
+      body: pkgBuffer.toString('base64'),
+      isBase64Encoded: true,
     });
   } catch (storageError) {
     if (storageError.code === 'NoSuchKey') {
       try {
-        const data = await npm.package(registry, name);
+        const npmPkgBuffer = await npm.tar(registry, `${pathParameters.name}/-/${pathParameters.tar}`);
         return callback(null, {
           statusCode: 200,
-          body: JSON.stringify(data['dist-tags']),
+          headers: {
+            'Content-Type': 'application/x-tar',
+          },
+          body: npmPkgBuffer.toString('base64'),
+          isBase64Encoded: true,
         });
-      } catch ({ message }) {
+      } catch (npmError) {
         return callback(null, {
-          statusCode: 404,
+          statusCode: npmError.status,
           body: JSON.stringify({
-            ok: false,
-            error: message,
+            error: npmError.message,
           }),
         });
       }
@@ -35,7 +44,6 @@ export default async ({ pathParameters }, context, callback) => {
     return callback(null, {
       statusCode: 500,
       body: JSON.stringify({
-        ok: false,
         error: storageError.message,
       }),
     });

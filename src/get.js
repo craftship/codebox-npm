@@ -16,7 +16,7 @@ export default async ({ pathParameters }, context, callback) => {
   } catch (storageError) {
     if (storageError.code === 'NoSuchKey') {
       try {
-        const data = await npm(registry, name);
+        const data = await npm.package(registry, name);
         return callback(null, {
           statusCode: 200,
           body: JSON.stringify(data),
