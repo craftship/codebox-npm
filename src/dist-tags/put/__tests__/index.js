@@ -30,7 +30,7 @@ describe('PUT registry/-/package/{name}/dist-tags/{tag}', () => {
       };
     });
 
-    it('should return package json from private registry', async () => {
+    it('should add tag and reuturn updated package json', async () => {
       await subject(event, jest.fn(), callback);
 
       expect(callback)

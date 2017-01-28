@@ -29,7 +29,7 @@ describe('DELETE registry/-/package/{name}/dist-tags/{tag}', () => {
       };
     });
 
-    it('should return package json from private registry', async () => {
+    it('should remove dist-tag and return updated package json', async () => {
       await subject(event, jest.fn(), callback);
 
       expect(callback)
