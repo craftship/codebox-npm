@@ -22,7 +22,7 @@ describe('GET /registry/-/package/{name}/dist-tags', () => {
 
     beforeEach(() => {
       event = {
-        path: {
+        pathParameters: {
           name: 'private-foo',
         },
       };
@@ -32,7 +32,10 @@ describe('GET /registry/-/package/{name}/dist-tags', () => {
       await subject(event, jest.fn(), callback);
 
       expect(callback)
-      .toHaveBeenCalledWith(null, { latest: '1.0.0' });
+      .toHaveBeenCalledWith(null, {
+        statusCode: 200,
+        body: JSON.stringify({ latest: '1.0.0' }),
+      });
     });
   });
 
@@ -42,7 +45,7 @@ describe('GET /registry/-/package/{name}/dist-tags', () => {
 
       beforeEach(() => {
         event = {
-          path: {
+          pathParameters: {
             name: 'bar',
           },
         };
@@ -52,7 +55,10 @@ describe('GET /registry/-/package/{name}/dist-tags', () => {
         await subject(event, jest.fn(), callback);
 
         expect(callback)
-        .toHaveBeenCalledWith(null, { latest: '1.0.0' });
+        .toHaveBeenCalledWith(null, {
+          statusCode: 200,
+          body: JSON.stringify({ latest: '1.0.0' }),
+        });
       });
     });
 
@@ -61,7 +67,7 @@ describe('GET /registry/-/package/{name}/dist-tags', () => {
 
       beforeEach(() => {
         event = {
-          path: {
+          pathParameters: {
             name: 'not-found',
           },
         };
@@ -72,8 +78,11 @@ describe('GET /registry/-/package/{name}/dist-tags', () => {
 
         expect(callback)
         .toHaveBeenCalledWith(null, {
-          ok: false,
-          error: '[404] Could Not Get Package: https://example.com/not-found',
+          statusCode: 404,
+          body: JSON.stringify({
+            ok: false,
+            error: 'Could Not Get Package: https://example.com/not-found',
+          }),
         });
       });
     });
@@ -84,7 +93,7 @@ describe('GET /registry/-/package/{name}/dist-tags', () => {
 
     beforeEach(() => {
       event = {
-        path: {
+        pathParameters: {
           name: 'uknown-error',
         },
       };
@@ -95,8 +104,11 @@ describe('GET /registry/-/package/{name}/dist-tags', () => {
 
       expect(callback)
       .toHaveBeenCalledWith(null, {
-        ok: false,
-        error: 'Could not find key',
+        statusCode: 500,
+        body: JSON.stringify({
+          ok: false,
+          error: 'Could not find key',
+        }),
       });
     });
   });

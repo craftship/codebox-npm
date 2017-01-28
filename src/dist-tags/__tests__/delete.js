@@ -22,7 +22,7 @@ describe('DELETE registry/-/package/{name}/dist-tags/{tag}', () => {
 
     beforeEach(() => {
       event = {
-        path: {
+        pathParameters: {
           name: 'private-foo',
           tag: 'latest',
         },
@@ -34,9 +34,12 @@ describe('DELETE registry/-/package/{name}/dist-tags/{tag}', () => {
 
       expect(callback)
       .toHaveBeenCalledWith(null, {
-        ok: true,
-        id: 'private-foo',
-        'dist-tags': {},
+        statusCode: 200,
+        body: JSON.stringify({
+          ok: true,
+          id: 'private-foo',
+          'dist-tags': {},
+        }),
       });
     });
   });
@@ -46,7 +49,7 @@ describe('DELETE registry/-/package/{name}/dist-tags/{tag}', () => {
 
     beforeEach(() => {
       event = {
-        path: {
+        pathParameters: {
           name: 'uknown-error',
         },
       };
@@ -57,8 +60,11 @@ describe('DELETE registry/-/package/{name}/dist-tags/{tag}', () => {
 
       expect(callback)
       .toHaveBeenCalledWith(null, {
-        ok: false,
-        error: 'Could not find key',
+        statusCode: 500,
+        body: JSON.stringify({
+          ok: false,
+          error: 'Could not find key',
+        }),
       });
     });
   });

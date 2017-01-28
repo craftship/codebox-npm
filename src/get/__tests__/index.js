@@ -22,7 +22,7 @@ describe('/registry/{name}', () => {
 
     beforeEach(() => {
       event = {
-        path: {
+        pathParameters: {
           name: 'private-foo',
         },
       };
@@ -33,10 +33,13 @@ describe('/registry/{name}', () => {
 
       expect(callback)
       .toHaveBeenCalledWith(null, {
-        name: 'private-foo',
-        'dist-tags': {
-          latest: '1.0.0',
-        },
+        statusCode: 200,
+        body: JSON.stringify({
+          name: 'private-foo',
+          'dist-tags': {
+            latest: '1.0.0',
+          },
+        }),
       });
     });
   });
@@ -47,7 +50,7 @@ describe('/registry/{name}', () => {
 
       beforeEach(() => {
         event = {
-          path: {
+          pathParameters: {
             name: 'bar',
           },
         };
@@ -58,10 +61,13 @@ describe('/registry/{name}', () => {
 
         expect(callback)
         .toHaveBeenCalledWith(null, {
-          name: 'bar',
-          'dist-tags': {
-            latest: '1.0.0',
-          },
+          statusCode: 200,
+          body: JSON.stringify({
+            name: 'bar',
+            'dist-tags': {
+              latest: '1.0.0',
+            },
+          }),
         });
       });
     });
@@ -71,7 +77,7 @@ describe('/registry/{name}', () => {
 
       beforeEach(() => {
         event = {
-          path: {
+          pathParameters: {
             name: 'not-found',
           },
         };
@@ -81,7 +87,12 @@ describe('/registry/{name}', () => {
         await subject(event, jest.fn(), callback);
 
         expect(callback)
-        .toHaveBeenCalledWith(new Error('[404] Could Not Get Package: https://example.com/not-found'));
+        .toHaveBeenCalledWith(null, {
+          statusCode: 404,
+          body: JSON.stringify({
+            error: 'Could Not Get Package: https://example.com/not-found',
+          }),
+        });
       });
     });
   });
@@ -91,7 +102,7 @@ describe('/registry/{name}', () => {
 
     beforeEach(() => {
       event = {
-        path: {
+        pathParameters: {
           name: 'uknown-error',
         },
       };
@@ -101,7 +112,12 @@ describe('/registry/{name}', () => {
       await subject(event, jest.fn(), callback);
 
       expect(callback)
-      .toHaveBeenCalledWith(new Error('Could not find key'));
+      .toHaveBeenCalledWith(null, {
+        statusCode: 500,
+        body: JSON.stringify({
+          error: 'Could not find key',
+        }),
+      });
     });
   });
 });

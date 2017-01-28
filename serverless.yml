@@ -41,7 +41,6 @@ functions:
       - http:
           path: 'registry/{name}'
           method: get
-          integration: lambda
 
   distTagsGet:
     handler: distTagsGet.default
@@ -53,7 +52,6 @@ functions:
       - http:
           path: 'registry/-/package/{name}/dist-tags'
           method: get
-          integration: lambda
   distTagsPut:
     handler: distTagsPut.default
     environment:
@@ -64,7 +62,6 @@ functions:
       - http:
           path: 'registry/-/package/{name}/dist-tags/{tag}'
           method: put
-          integration: lambda
   distTagsDelete:
     handler: distTagsDelete.default
     environment:
@@ -75,7 +72,6 @@ functions:
       - http:
           path: 'registry/-/package/{name}/dist-tags/{tag}'
           method: delete
-          integration: lambda
 
 resources:
   Resources:

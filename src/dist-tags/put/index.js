@@ -1,14 +1,14 @@
 import S3 from '../../adapters/s3';
 
-export default async ({ body, path }, context, callback) => {
+export default async ({ body, pathParameters }, context, callback) => {
   const { bucket, region } = process.env;
-  const name = `${decodeURIComponent(path.name)}`;
+  const name = `${decodeURIComponent(pathParameters.name)}`;
   const storage = new S3({ region, bucket });
 
   try {
     const pkgBuffer = await storage.get(`${name}/index.json`);
     const json = JSON.parse(pkgBuffer.toString());
-    json['dist-tags'][path.tag] = body;
+    json['dist-tags'][pathParameters.tag] = body;
 
     await storage.put(
       `${name}/index.json`,
@@ -16,14 +16,20 @@ export default async ({ body, path }, context, callback) => {
     );
 
     return callback(null, {
-      ok: true,
-      id: path.name,
-      'dist-tags': json['dist-tags'],
+      statusCode: 200,
+      body: JSON.stringify({
+        ok: true,
+        id: pathParameters.name,
+        'dist-tags': json['dist-tags'],
+      }),
     });
   } catch (storageError) {
     return callback(null, {
-      ok: false,
-      error: storageError.message,
+      statusCode: 500,
+      body: JSON.stringify({
+        ok: false,
+        error: storageError.message,
+      }),
     });
   }
 };
