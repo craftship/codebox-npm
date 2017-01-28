@@ -1,5 +1,5 @@
 const objects = {
-  'private-foo/index.json': new Buffer('{ "name": "private-foo", "dist-tags": { "latest": "1.0.0" } }'),
+  'private-foo/index.json': new Buffer('{"name":"private-foo","dist-tags":{"latest":"1.0.0"}}'),
 };
 
 export default {

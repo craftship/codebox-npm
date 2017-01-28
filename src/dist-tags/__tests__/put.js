@@ -22,7 +22,7 @@ describe('PUT registry/-/package/{name}/dist-tags/{tag}', () => {
 
     beforeEach(() => {
       event = {
-        path: {
+        pathParameters: {
           name: 'private-foo',
           tag: 'newtag',
         },
@@ -35,12 +35,15 @@ describe('PUT registry/-/package/{name}/dist-tags/{tag}', () => {
 
       expect(callback)
       .toHaveBeenCalledWith(null, {
-        ok: true,
-        id: 'private-foo',
-        'dist-tags': {
-          latest: '1.0.0',
-          newtag: '2.0.0',
-        },
+        statusCode: 200,
+        body: JSON.stringify({
+          ok: true,
+          id: 'private-foo',
+          'dist-tags': {
+            latest: '1.0.0',
+            newtag: '2.0.0',
+          },
+        }),
       });
     });
   });
@@ -50,7 +53,7 @@ describe('PUT registry/-/package/{name}/dist-tags/{tag}', () => {
 
     beforeEach(() => {
       event = {
-        path: {
+        pathParameters: {
           name: 'uknown-error',
         },
       };
@@ -61,8 +64,11 @@ describe('PUT registry/-/package/{name}/dist-tags/{tag}', () => {
 
       expect(callback)
       .toHaveBeenCalledWith(null, {
-        ok: false,
-        error: 'Could not find key',
+        statusCode: 500,
+        body: JSON.stringify({
+          ok: false,
+          error: 'Could not find key',
+        }),
       });
     });
   });
