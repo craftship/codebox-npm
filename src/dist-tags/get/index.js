@@ -7,8 +7,8 @@ export default async ({ path }, context, callback) => {
   const storage = new S3({ region, bucket });
 
   try {
-    const body = await storage.get(`${name}/index.json`);
-    const json = JSON.parse(body.toString());
+    const pkgBuffer = await storage.get(`${name}/index.json`);
+    const json = JSON.parse(pkgBuffer.toString());
     return callback(null, json['dist-tags']);
   } catch (storageError) {
     if (storageError.code === 'NoSuchKey') {

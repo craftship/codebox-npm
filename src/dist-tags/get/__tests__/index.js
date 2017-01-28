@@ -3,7 +3,7 @@ jest.mock('aws-sdk');
 
 const handler = require('../');
 
-describe('/registry/-/package/{name}/dist-tags', () => {
+describe('GET /registry/-/package/{name}/dist-tags', () => {
   let callback;
   let subject;
 
