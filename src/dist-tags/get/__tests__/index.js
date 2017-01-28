@@ -3,7 +3,7 @@ jest.mock('aws-sdk');
 
 const handler = require('../');
 
-describe('/registry/{name}', () => {
+describe('/registry/-/package/{name}/dist-tags', () => {
   let callback;
   let subject;
 
@@ -28,16 +28,11 @@ describe('/registry/{name}', () => {
       };
     });
 
-    it('should return correct response', async () => {
+    it('should return package json from private registry', async () => {
       await subject(event, jest.fn(), callback);
 
       expect(callback)
-      .toHaveBeenCalledWith(null, {
-        name: 'private-foo',
-        'dist-tags': {
-          latest: '1.0.0',
-        },
-      });
+      .toHaveBeenCalledWith(null, { latest: '1.0.0' });
     });
   });
 
@@ -53,16 +48,11 @@ describe('/registry/{name}', () => {
         };
       });
 
-      it('should package from npm', async () => {
+      it('should return package json from npm', async () => {
         await subject(event, jest.fn(), callback);
 
         expect(callback)
-        .toHaveBeenCalledWith(null, {
-          name: 'bar',
-          'dist-tags': {
-            latest: '1.0.0',
-          },
-        });
+        .toHaveBeenCalledWith(null, { latest: '1.0.0' });
       });
     });
 
@@ -81,7 +71,10 @@ describe('/registry/{name}', () => {
         await subject(event, jest.fn(), callback);
 
         expect(callback)
-        .toHaveBeenCalledWith(new Error('[404] Could Not Get Package: https://example.com/not-found'));
+        .toHaveBeenCalledWith(null, {
+          ok: false,
+          error: '[404] Could Not Get Package: https://example.com/not-found',
+        });
       });
     });
   });
@@ -97,11 +90,14 @@ describe('/registry/{name}', () => {
       };
     });
 
-    it('should return error with status code', async () => {
+    it('should return correct error response', async () => {
       await subject(event, jest.fn(), callback);
 
       expect(callback)
-      .toHaveBeenCalledWith(new Error('Could not find key'));
+      .toHaveBeenCalledWith(null, {
+        ok: false,
+        error: 'Could not find key',
+      });
     });
   });
 });

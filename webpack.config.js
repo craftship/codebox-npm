@@ -3,7 +3,8 @@ var path = require('path');
 module.exports = {
   target: 'node',
   entry: {
-    get: ['babel-polyfill', './src/get/index.js'],
+    get: ['./boostrap', './src/get/index.js'],
+    distTagsGet: ['./boostrap', './src/dist-tags/get/index.js'],
   },
   output: {
     libraryTarget: 'commonjs',
