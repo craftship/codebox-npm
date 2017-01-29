@@ -12,14 +12,14 @@ enterprise.
 
 It is compatiable with the latest version of the `npm` cli.
 
-#### Deploy your own Registry
+### Deploy your own Registry
 
-## Prerequisites
+#### Prerequisites
 * AWS credentials setup with relevant rights to create resource for deployment of Serverless.
 * Latest version of serverless installed globally (`npm install serverless -g`).
 
-## Steps
-1. `serverless install --url https://github.com/craftship/yith-next --name my-npm-registry`
+#### Steps
+1. `serverless install --url https://github.com/craftship/yith-next --name my-npm-registry` - pick whichever name you prefer for your registry
 2. `cd my-npm-registry`
 3. `npm install`
 4. Setup your environment variables:
@@ -28,7 +28,7 @@ export YITH_ADMINS="" # Comma seperated list of github usernames (e.g. "jon,kadi
 export YITH_REGISTRY="https://registry.npmjs.org/" # The NPM mirror you wish to proxy through to
 export YITH_BUCKET="my-npm-registry-storage" # The name of the bucket in which you wish to store your packages
 export YITH_GITHUB_URL="https://api.github.com/" # The GitHub / GitHub Entperise **api** url
-export YITH_GITHUB_CLIENT_ID="client_id" # The client id for your GitHub application (e.g. [](https://github.com/settings/developers))
+export YITH_GITHUB_CLIENT_ID="client_id" # The client id for your GitHub application (e.g. https://github.com/settings/developers)
 export YITH_GITHUB_SECRET="secret" # The secret for your GitHub application
 ```
 5. `serverless deploy --stage prod` (pick which ever stage you prefer)
