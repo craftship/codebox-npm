@@ -41,14 +41,14 @@ functions:
     handler: put.default
     events:
       - http:
-          path: 'registry/{name}'
+          path: '/registry/{name}'
           method: put
           authorizer: authorizerGithub
   get:
     handler: get.default
     events:
       - http:
-          path: 'registry/{name}'
+          path: '/registry/{name}'
           method: get
           authorizer: authorizerGithub
 
@@ -56,21 +56,21 @@ functions:
     handler: distTagsGet.default
     events:
       - http:
-          path: 'registry/-/package/{name}/dist-tags'
+          path: '/registry/-/package/{name}/dist-tags'
           method: get
           authorizer: authorizerGithub
   distTagsPut:
     handler: distTagsPut.default
     events:
       - http:
-          path: 'registry/-/package/{name}/dist-tags/{tag}'
+          path: '/registry/-/package/{name}/dist-tags/{tag}'
           method: put
           authorizer: authorizerGithub
   distTagsDelete:
     handler: distTagsDelete.default
     events:
       - http:
-          path: 'registry/-/package/{name}/dist-tags/{tag}'
+          path: '/registry/-/package/{name}/dist-tags/{tag}'
           method: delete
           authorizer: authorizerGithub
 
@@ -78,7 +78,7 @@ functions:
     handler: userPut.default
     events:
       - http:
-          path: 'registry/-/user/{id}'
+          path: '/registry/-/user/{id}'
           method: put
 
   tarGet:
@@ -87,7 +87,7 @@ functions:
       - http:
           integration: lambda
           authorizer: authorizerGithub
-          path: 'registry/{name}/-/{tar}'
+          path: '/registry/{name}/-/{tar}'
           method: get
           contentHandling: CONVERT_TO_BINARY
           request:
