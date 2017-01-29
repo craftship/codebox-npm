@@ -2,6 +2,7 @@ frameworkVersion: '=1.5.1'
 
 plugins:
   - serverless-webpack
+  - content-handling
 
 service: yith
 
@@ -84,9 +85,18 @@ functions:
     handler: tarGet.default
     events:
       - http:
+          integration: lambda
+          authorizer: authorizerGithub
           path: 'registry/{name}/-/{tar}'
           method: get
-          authorizer: authorizerGithub
+          contentHandling: CONVERT_TO_BINARY
+          request:
+            template:
+              application/json: >
+                {
+                  "name": "$input.params('name')",
+                  "tar": "$input.params('tar')"
+                }
 
 resources:
   Resources:
