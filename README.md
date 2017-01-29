@@ -32,7 +32,7 @@ export YITH_GITHUB_CLIENT_ID="client_id" # The client id for your GitHub applica
 export YITH_GITHUB_SECRET="secret" # The secret for your GitHub application
 ```
 5. `serverless deploy --stage prod` (pick which ever stage you prefer)
-6. `npm set registry <url>` - url being the one shown in the terminal after deployment completes, such as:
+6. `npm set registry <url>` - `<url>` being the one shown in the terminal after deployment completes, such as:
 `https://abcd12345.execute-api.eu-west-1.amazonaws.com/dev/registry/`
 
 **Thats it!**
@@ -40,7 +40,7 @@ export YITH_GITHUB_SECRET="secret" # The secret for your GitHub application
 ### NPM CLI Compatible Features
 * `npm login` - via github / github enterprise (if 2FA enabled format username for npm login via cli as `username.otp` e.g. `craftship.123456`)
 * `npm publish` - Stores all packages within S3 (Never publishes to real npm), `--tag` is supported
-* `npm dist-tags` - Only allows amendment of dist-tags in your private registry, `ls` will go to S3 if package not in private registry
+* `npm dist-tags` - Only allows amendment of dist-tags in your private registry, `ls` will go to S3 first, if it does not exist grabs from real npm
 * `npm install` - Looks in S3 first, if it does not exist grabs from real npm
 * `npm install@version`- Looks in S3 first, if it does not exist grabs from real npm
 * `npm info` - Looks in S3 first, if it does not exist grabs from real npm
