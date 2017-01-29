@@ -8,9 +8,9 @@ service: yith
 
 provider:
   name: aws
-  region: eu-central-1
   runtime: nodejs4.3
   stage: dev
+  region: ${env:YITH_REGION}
   environment:
     admins: ${env:YITH_ADMINS}
     registry: ${env:YITH_REGISTRY}

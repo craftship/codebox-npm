@@ -24,6 +24,7 @@ It is compatiable with the latest version of the `npm` cli.
 3. `npm install`
 4. Setup your environment variables:
 ```
+export YITH_REGION="eu-west-1" # Set the AWS region you wish your registry to be deployed to
 export YITH_ADMINS="" # Comma seperated list of github usernames (e.g. "jon,kadi"), these users will be the only ones able to publish
 export YITH_REGISTRY="https://registry.npmjs.org/" # The NPM mirror you wish to proxy through to
 export YITH_BUCKET="my-npm-registry-storage" # The name of the bucket in which you wish to store your packages
