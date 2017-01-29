@@ -17,9 +17,9 @@
     "webpack-node-externals": "^1.5.4"
   },
   "scripts": {
-    "lint": "node_modules/.bin/eslint ./src",
-    "test": "node_modules/.bin/jest --coverage",
-    "nsp": "node_modules/.bin/nsp check"
+    "lint": "eslint ./src",
+    "test": "jest --coverage",
+    "nsp": "nsp check"
   },
   "repository": {
     "type": "git",
