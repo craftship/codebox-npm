@@ -19,10 +19,10 @@ It is compatiable with the latest version of the `npm` cli.
 * Latest version of serverless installed globally (`npm install serverless -g`).
 
 #### Steps
-1. `serverless install --url https://github.com/craftship/yith-next --name my-npm-registry` - pick whichever name you prefer for your registry
-2. `cd my-npm-registry`
-3. `npm install`
-4. Setup your environment variables:
+* `serverless install --url https://github.com/craftship/yith-next --name my-npm-registry` - pick whichever name you prefer for your registry
+* `cd my-npm-registry`
+* `npm install`
+* Setup your environment variables:
 ```
 export YITH_REGION="eu-west-1" # Set the AWS region you wish your registry to be deployed to
 export YITH_ADMINS="" # Comma seperated list of github usernames (e.g. "jon,kadi"), these users will be the only ones able to publish
@@ -32,8 +32,8 @@ export YITH_GITHUB_URL="https://api.github.com/" # The GitHub / GitHub Entperise
 export YITH_GITHUB_CLIENT_ID="client_id" # The client id for your GitHub application (e.g. https://github.com/settings/developers)
 export YITH_GITHUB_SECRET="secret" # The secret for your GitHub application
 ```
-5. `serverless deploy --stage prod` (pick which ever stage you prefer)
-6. `npm set registry <url>` - `<url>` being the one shown in the terminal after deployment completes, such as:
+* `serverless deploy --stage prod` (pick which ever stage you prefer)
+* `npm set registry <url>` - `<url>` being the one shown in the terminal after deployment completes, such as:
 `https://abcd12345.execute-api.eu-west-1.amazonaws.com/dev/registry/`
 
 **Thats it!**
