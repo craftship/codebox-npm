@@ -5,6 +5,7 @@ module.exports = {
   target: 'node',
   externals: [nodeExternals()],
   entry: {
+    authorizerGithub: ['./boostrap', './src/authorizers/github.js'],
     put: ['./boostrap', './src/put.js'],
     get: ['./boostrap', './src/get.js'],
     distTagsGet: ['./boostrap', './src/dist-tags/get.js'],

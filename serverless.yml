@@ -11,6 +11,7 @@ provider:
   runtime: nodejs4.3
   stage: dev
   environment:
+    admins: ${env:YITH_ADMINS}
     registry: ${env:YITH_REGISTRY}
     githubUrl: ${env:YITH_GITHUB_URL}
     githubClientId:  ${env:YITH_GITHUB_CLIENT_ID}
@@ -32,18 +33,23 @@ provider:
         - "arn:aws:apigateway:*"
 
 functions:
+  authorizerGithub:
+    handler: authorizerGithub.default
+
   put:
     handler: put.default
     events:
       - http:
           path: 'registry/{name}'
           method: put
+          authorizer: authorizerGithub
   get:
     handler: get.default
     events:
       - http:
           path: 'registry/{name}'
           method: get
+          authorizer: authorizerGithub
 
   distTagsGet:
     handler: distTagsGet.default
@@ -51,18 +57,21 @@ functions:
       - http:
           path: 'registry/-/package/{name}/dist-tags'
           method: get
+          authorizer: authorizerGithub
   distTagsPut:
     handler: distTagsPut.default
     events:
       - http:
           path: 'registry/-/package/{name}/dist-tags/{tag}'
           method: put
+          authorizer: authorizerGithub
   distTagsDelete:
     handler: distTagsDelete.default
     events:
       - http:
           path: 'registry/-/package/{name}/dist-tags/{tag}'
           method: delete
+          authorizer: authorizerGithub
 
   userPut:
     handler: userPut.default
@@ -77,6 +86,7 @@ functions:
       - http:
           path: 'registry/{name}/-/{tar}'
           method: get
+          authorizer: authorizerGithub
 
 resources:
   Resources:
