@@ -8,7 +8,7 @@ export default async ({ body, pathParameters }, context, callback) => {
   try {
     const pkgBuffer = await storage.get(`${name}/index.json`);
     const json = JSON.parse(pkgBuffer.toString());
-    json['dist-tags'][pathParameters.tag] = body;
+    json['dist-tags'][pathParameters.tag] = body.replace(/"/g, '');
 
     await storage.put(
       `${name}/index.json`,
