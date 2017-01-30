@@ -13,7 +13,7 @@
     "jest": "^18.1.0",
     "json-loader": "^0.5.4",
     "nsp": "^2.6.2",
-    "serverless-webpack": "^1.0.0-rc.4",
+    "serverless-webpack": "git+ssh://git@github.com/craftship/serverless-webpack.git",
     "webpack-node-externals": "^1.5.4"
   },
   "scripts": {
