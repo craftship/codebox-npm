@@ -19,7 +19,7 @@ It is compatiable with the latest version of the `npm` cli.
 * Latest version of serverless installed globally (`npm install serverless -g`).
 
 #### Steps
-* `serverless install --url https://github.com/craftship/yith --name my-npm-registry` - pick whichever name you prefer for your registry
+* `serverless install --url https://github.com/craftship/yith/tree/0.7.0 --name my-npm-registry` - pick whichever name you prefer for your registry
 * `cd my-npm-registry`
 * `npm install`
 * Setup your environment variables:
