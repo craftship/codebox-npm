@@ -17,9 +17,9 @@
     "webpack-node-externals": "^1.5.4"
   },
   "scripts": {
-    "lint": "node_modules/.bin/eslint ./src",
-    "test": "node_modules/.bin/jest --coverage",
-    "nsp": "node_modules/.bin/nsp check"
+    "lint": "eslint ./src",
+    "test": "jest --coverage",
+    "nsp": "nsp check"
   },
   "repository": {
     "type": "git",
@@ -38,8 +38,8 @@
   },
   "homepage": "https://github.com/craftship/yith#readme",
   "dependencies": {
-    "babel-runtime": "^6.22.0",
     "babel-polyfill": "^6.22.0",
+    "babel-runtime": "^6.22.0",
     "github": "^8.1.1",
     "node-fetch": "^1.6.3"
   }
