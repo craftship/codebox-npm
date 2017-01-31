@@ -44,8 +44,13 @@ registry=https://ab1cd3ef4.execute-api.eu-west-1.amazonaws.com/prod/registry
 
 If a user is doing any `npm` operation for the first time in the repository then they will need to `npm login`.
 
+## `npm login` Usage
+Once you are using the private registry you are required to always be authenticated with npm. This ensures not just anyone can request private packages that are not to be shared with the outside world.
+
+To login you can use the `npm login` cli command, if you have 2FA enabled you will need to (when prompted) enter the username in the format of your GitHub username.otp e.g. jonsharratt.123456. Once logged in it will store a long life token that will be used going forward.
+
 ## Admins / Publishing Packages
-`npm publish` works as it normally does via the npm CLI.  By default all users that authenticate have read only access.  If you wish to allow publish rights then you need to set the `YITH_ADMINS` environment variable to a comma separated list of GitHub usernames such as `jonsharratt, kadikraman`.
+`npm publish` works as it normally does via the npm CLI.  By default all users that authenticate have read only access.  If you wish to allow publish rights then you need to set the `YITH_ADMINS` environment variable to a comma separated list of GitHub usernames such as `jonsharratt,kadikraman` and re-deploy.
 
 ## Setup with your CI
 We recommend creating a GitHub user that can represent your team as a service account.  Once created you can then use that account to `npm login` to the private registry.
@@ -76,4 +81,5 @@ You can then reuse this build step for all of your repositories using your priva
 ## Other Resources
 
 [Blog](https://craftship.io/open/source/serverless/private/npm/registry/yith/2016/09/26/serverless-yith.html)
+
 [FAQ](https://github.com/craftship/yith/wiki/FAQ)
