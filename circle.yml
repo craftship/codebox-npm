@@ -6,3 +6,5 @@ test:
   pre:
     - npm run nsp
     - npm run lint
+  post:
+    - npm run coveralls
