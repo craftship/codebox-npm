@@ -1,6 +1,7 @@
 frameworkVersion: '=1.5.1'
 
 plugins:
+  - environment-variables
   - serverless-webpack
   - content-handling
 
@@ -17,7 +18,7 @@ provider:
     githubUrl: ${env:YITH_GITHUB_URL}
     githubClientId:  ${env:YITH_GITHUB_CLIENT_ID}
     githubSecret:  ${env:YITH_GITHUB_SECRET}
-    bucket: ${env:YITH_BUCKET}-${opt:stage}
+    bucket: ${env:YITH_BUCKET, ''}-${opt:stage}
     region: ${self:provider.region}
   iamRoleStatements:
     - Effect: "Allow"
