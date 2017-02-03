@@ -65,7 +65,7 @@ describe('GET /registry/{name}/-/{tar}', () => {
 
     beforeEach(() => {
       npmTarStub = stub().returns(
-        new Buffer('YmFy', 'base64')
+        new Buffer('YmFy', 'base64'),
       );
 
       const mockNpm = {
