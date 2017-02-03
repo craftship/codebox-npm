@@ -2,4 +2,9 @@ extends: airbnb-base
 plugins:
   - import
 env:
-  jest: true
+  mocha: true
+globals:
+  assert: true
+  stub: true
+  spy: true
+  createStubInstance: true

@@ -5,3 +5,4 @@ coverage
 .webpack
 .serverless
 .env
+.nyc_output

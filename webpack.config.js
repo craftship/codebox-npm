@@ -1,5 +1,5 @@
-var nodeExternals = require('webpack-node-externals');
-var path = require('path');
+const nodeExternals = require('webpack-node-externals');
+const path = require('path');
 
 module.exports = {
   target: 'node',
@@ -17,7 +17,7 @@ module.exports = {
   output: {
     libraryTarget: 'commonjs',
     path: path.join(__dirname, '.webpack'),
-    filename: '[name].js'
+    filename: '[name].js',
   },
   module: {
     loaders: [{
@@ -28,7 +28,7 @@ module.exports = {
     },
     {
       test: /\.json$/,
-      loader: 'json-loader'
-    }]
+      loader: 'json-loader',
+    }],
   },
 };
