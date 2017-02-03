@@ -1,0 +1,3 @@
+./integration/bin/deploy
+$(npm bin)/mocha ./integration -t 15000 # Timeout set due to function cold starts
+./integration/bin/remove
