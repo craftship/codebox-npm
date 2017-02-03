@@ -1,3 +1,8 @@
+[![Serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
+[![CircleCI Status](https://circleci.com/gh/craftship/yith.svg?style=shield)](https://circleci.com/gh/craftship/yith.svg?style=shield)
+[![Coverage Status](https://coveralls.io/repos/github/craftship/yith/badge.svg?branch=master)](https://coveralls.io/github/craftship/yith?branch=master)
+
+
 <img src="https://s3-eu-west-1.amazonaws.com/learn.craftship.io/yith_logo.png" height="150"/>
 
 ## Overview
