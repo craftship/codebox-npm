@@ -89,7 +89,7 @@ export default async ({ methodArn, authorizationToken }, context, callback) => {
     }));
   } catch (error) {
     return callback(null, generatePolicy({
-      token: authorizationToken,
+      token: tokenParts[1],
       effect: 'Deny',
       methodArn,
       isAdmin: false,
