@@ -46,6 +46,14 @@ describe('GET /registry/-/package/{name}/dist-tags', () => {
         subject.__Rewire__('S3', storageSpy);
       });
 
+      it('should get from storage with correct key', async () => {
+        await subject(event, stub(), callback);
+
+        assert(storageInstance.get.calledWithExactly(
+          'foo-bar-package/index.json',
+        ));
+      });
+
       it('should return dist tags response', async () => {
         await subject(event, stub(), callback);
 

@@ -22,8 +22,9 @@
     "webpack-node-externals": "^1.5.4"
   },
   "scripts": {
+    "clean": "rm -rf ./lib && rm -rf ./coverage",
     "lint": "eslint .",
-    "test": "nyc mocha",
+    "test": "npm run clean && nyc mocha",
     "nsp": "nsp check",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
