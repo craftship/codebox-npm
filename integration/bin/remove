@@ -1,0 +1,7 @@
+#!/bin/bash
+
+STAGE='integration'
+[ -n "${CIRCLE_SHA1}" ] && STAGE="${CIRCLE_SHA1:0:8}${CIRCLE_NODE_INDEX}"
+
+sls remove --stage $STAGE
+rm .npmrc

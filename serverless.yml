@@ -1,4 +1,4 @@
-frameworkVersion: '=1.5.1'
+frameworkVersion: '=1.6.1'
 
 plugins:
   - environment-variables

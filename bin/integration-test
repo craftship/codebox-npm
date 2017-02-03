@@ -1,0 +1,27 @@
+#!/bin/bash
+
+NODE_TAG=$1
+
+docker build \
+--rm=false \
+--build-arg sls_version=1.6.1 \
+-t yith-node-$NODE_TAG \
+-q \
+-f ./integration/Dockerfile-$NODE_TAG .
+
+docker run \
+-e AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} \
+-e AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} \
+-e YITH_REGION=${YITH_REGION} \
+-e YITH_ADMINS=${YITH_ADMINS} \
+-e YITH_REGISTRY=${YITH_REGISTRY} \
+-e YITH_BUCKET=${YITH_BUCKET} \
+-e YITH_GITHUB_URL=${YITH_GITHUB_URL} \
+-e YITH_GITHUB_CLIENT_ID=${YITH_GITHUB_CLIENT_ID} \
+-e YITH_GITHUB_SECRET=${YITH_GITHUB_SECRET} \
+-e NPM_LOGIN_TOKEN=${NPM_LOGIN_TOKEN} \
+-e CIRCLE_SHA1=${CIRCLE_SHA1} \
+-e CIRCLE_NODE_INDEX=${CIRCLE_NODE_INDEX} \
+-it \
+--rm=false \
+--name yith-node-$NODE_TAG yith-node-$NODE_TAG

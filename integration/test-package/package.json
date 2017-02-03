@@ -1,0 +1,8 @@
+{
+  "name": "test-package",
+  "version": "1.0.0",
+  "description": "Test package for integration tests",
+  "main": "index.js",
+  "author": "Craftship Ltd <hello@craftship.io>",
+  "license": "MIT"
+}

@@ -1,0 +1,41 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+
+const path = require('path');
+
+const spawn = require('child_process').spawn;
+
+let stage = 'integration';
+
+if (process.env.CIRCLE_SHA1) {
+  stage = `${process.env.CIRCLE_SHA1.substring(0, 8)}${process.env.CIRCLE_NODE_INDEX}`;
+}
+
+console.log(`Deploying yith ${stage}...`);
+
+const slsDeploy = spawn('sls', ['deploy', '--stage', stage]);
+
+let registryUrl;
+
+slsDeploy.stdout.on('data', (data) => {
+  if (!registryUrl) {
+    const registryRegex = new RegExp('https://.+?(?={name})');
+    const urls = registryRegex.exec(data.toString());
+
+    if (urls) {
+      registryUrl = urls[0];
+      const urlParts = registryUrl.split('/');
+      const loginUrl = `//${urlParts[2]}/${urlParts[3]}/${urlParts[4]}/:_authToken=${process.env.NPM_LOGIN_TOKEN}`;
+      fs.writeFileSync(path.resolve(process.env.PWD, '.npmrc'), `registry=${registryUrl}\r\n${loginUrl}\r\n`);
+    }
+  }
+});
+
+slsDeploy.on('close', (code) => {
+  if (code === 0) {
+    console.log(`Finished deployment for yith ${stage} : code ${code}`);
+  } else {
+    throw new Error(code);
+  }
+});
