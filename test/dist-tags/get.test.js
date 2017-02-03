@@ -29,7 +29,7 @@ describe('GET /registry/-/package/{name}/dist-tags', () => {
   });
 
   describe('dist-tags ls', () => {
-    context('package exists', () => {
+    context('package exists in private registry', () => {
       beforeEach(() => {
         storageSpy = spy(() => {
           storageInstance = createStubInstance(Storage);
@@ -68,7 +68,7 @@ describe('GET /registry/-/package/{name}/dist-tags', () => {
       });
     });
 
-    context('package does not exist in storage or npm', () => {
+    context('package does not exist in private registry or npm', () => {
       let npmPackageStub;
 
       beforeEach(() => {
@@ -109,7 +109,7 @@ describe('GET /registry/-/package/{name}/dist-tags', () => {
       });
     });
 
-    context('package does not exist', () => {
+    context('package does not exist in private registry', () => {
       let npmPackageStub;
 
       beforeEach(() => {
