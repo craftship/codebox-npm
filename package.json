@@ -6,20 +6,24 @@
   "devDependencies": {
     "aws-sdk": "^2.7.10",
     "babel-loader": "^6.2.10",
+    "babel-plugin-rewire": "^1.0.0",
     "babel-preset-env": "^1.1.8",
+    "babel-register": "^6.22.0",
     "coveralls": "^2.11.15",
     "eslint": "^3.14.1",
     "eslint-config-airbnb-base": "^11.0.1",
     "eslint-plugin-import": "^2.2.0",
-    "jest": "^18.1.0",
     "json-loader": "^0.5.4",
+    "mocha": "^3.2.0",
     "nsp": "^2.6.2",
+    "nyc": "^10.1.2",
     "serverless-webpack": "git+ssh://git@github.com/craftship/serverless-webpack.git",
+    "sinon": "^1.17.7",
     "webpack-node-externals": "^1.5.4"
   },
   "scripts": {
-    "lint": "eslint ./src",
-    "test": "jest --coverage",
+    "lint": "eslint .",
+    "test": "nyc mocha",
     "nsp": "nsp check",
     "coveralls": "cat ./coverage/lcov.info | coveralls"
   },
