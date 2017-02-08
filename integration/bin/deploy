@@ -18,7 +18,7 @@ const slsDeploy = spawn('sls', ['deploy', '--stage', stage]);
 
 let registryUrl;
 
-slsDeploy.sterr.on('data', (data) => {
+slsDeploy.stderr.on('data', (data) => {
   console.log('Error:', data.toString());
 });
 
