@@ -18,6 +18,10 @@ const slsDeploy = spawn('sls', ['deploy', '--stage', stage]);
 
 let registryUrl;
 
+slsDeploy.sterr.on('data', (data) => {
+  console.log('Error:', data.toString());
+});
+
 slsDeploy.stdout.on('data', (data) => {
   if (!registryUrl) {
     const registryRegex = new RegExp('https://.+?(?={name})');
