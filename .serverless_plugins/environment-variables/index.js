@@ -1,4 +1,4 @@
-class EnviornmentVariablesCheck {
+class EnvironmentVariablesCheck {
   constructor(serverless, options) {
     this.serverless = serverless;
     this.options = options;
@@ -55,4 +55,4 @@ class EnviornmentVariablesCheck {
   }
 }
 
-module.exports = EnviornmentVariablesCheck;
+module.exports = EnvironmentVariablesCheck;
