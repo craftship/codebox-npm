@@ -2,6 +2,7 @@ frameworkVersion: '=1.6.1'
 
 plugins:
   - environment-variables
+  - remove-storage
   - serverless-webpack
   - content-handling
 
