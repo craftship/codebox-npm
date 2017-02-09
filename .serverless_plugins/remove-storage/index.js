@@ -1,8 +1,6 @@
 class RemoveStorageBucket {
-  constructor(serverless, options) {
+  constructor(serverless) {
     this.serverless = serverless;
-    this.options = options;
-
     this.provider = this.serverless.getProvider('aws');
 
     this.hooks = {
@@ -11,22 +9,28 @@ class RemoveStorageBucket {
   }
 
   beforeRemove() {
-    const s3 = new this.provider.sdk.S3({});
+    return new Promise((resolve, reject) => {
+      const s3 = new this.provider.sdk.S3({});
 
-    const bucket = this.serverless.service.resources
-    .Resources
-    .PackageStorage
-    .Properties
-    .BucketName;
+      const bucket = this.serverless.service.resources
+      .Resources
+      .PackageStorage
+      .Properties
+      .BucketName;
 
-    s3
-    .deleteBucket({
-      Bucket: bucket,
-    }).promise()
-    .then(() => {
-      this.serverless.cli.log('AWS Package Storage Removed');
-    })
-    .catch(err => this.serverless.cli.log(`Could not remove AWS package storage: ${err.message}`));
+      return s3
+      .deleteBucket({
+        Bucket: bucket,
+      }).promise()
+      .then(() => {
+        this.serverless.cli.log('AWS Package Storage Removed');
+        resolve();
+      })
+      .catch((err) => {
+        this.serverless.cli.log(`Could not remove AWS package storage: ${err.message}`);
+        reject(err);
+      });
+    });
   }
 }
 
