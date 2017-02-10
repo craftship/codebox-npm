@@ -21,41 +21,44 @@ class RemoveStorageBucket {
     return this.s3.listObjectsV2({
       Bucket: this.bucket,
       ContinuationToken: token,
-    }).promise()
-   .then((data) => {
+    })
+    .promise()
+    .then((data) => {
       allKeys.push(data.Contents);
 
       if (data.IsTruncated) {
         return this.listAllKeys(data.NextContinuationToken);
       }
 
-      return [].concat.apply([], allKeys).map(
-        ({ Key }) => ({ Key })
-      );
-    })
+      return [].concat(...allKeys).map(({ Key }) => ({ Key }));
+    });
   }
 
   beforeRemove() {
     return new Promise((resolve, reject) => {
       return this.listAllKeys()
       .then((keys) => {
+        if (keys.length > 0) {
+          return this.s3
+          .deleteObjects({
+            Bucket: this.bucket,
+            Delete: {
+              Objects: keys,
+            },
+          }).promise();
+        }
+
+        return true;
+      })
+      .then(() => {
         return this.s3
-        .deleteObjects({
+        .deleteBucket({
           Bucket: this.bucket,
-          Delete: {
-            Objects: keys,
-          },
         }).promise()
         .then(() => {
-          return this.s3
-          .deleteBucket({
-            Bucket: this.bucket,
-          }).promise()
-          .then(() => {
-            this.serverless.cli.log('AWS Package Storage Removed');
-            resolve();
-          })
-        })
+          this.serverless.cli.log('AWS Package Storage Removed');
+          resolve();
+        });
       })
       .catch((err) => {
         this.serverless.cli.log(`Could not remove AWS package storage: ${err.message}`);
