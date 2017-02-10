@@ -18,12 +18,7 @@ const slsDeploy = spawn('sls', ['deploy', '--stage', stage]);
 
 let registryUrl;
 
-slsDeploy.stderr.on('data', (data) => {
-  console.log('Error:', data.toString());
-});
-
 slsDeploy.stdout.on('data', (data) => {
-  console.log(data.toString());
   if (!registryUrl) {
     const registryRegex = new RegExp('https://.+?(?={name})');
     const urls = registryRegex.exec(data.toString());
@@ -37,10 +32,10 @@ slsDeploy.stdout.on('data', (data) => {
   }
 });
 
-slsDeploy.on('close', (code) => {
+slsDeploy.on('exit', (code) => {
   if (code === 0) {
     console.log(`Finished deployment for yith ${stage} : code ${code}`);
   } else {
-    throw new Error(code);
+    console.log(`Error deploying code ${code}`);
   }
 });

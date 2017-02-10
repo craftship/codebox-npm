@@ -40,7 +40,7 @@ describe('Plugin: RemoveStorageBucket', () => {
 
                 const awsS3Instance = createStubInstance(AWS.S3);
                 awsS3Instance.deleteBucket = deleteBucketStub;
-                awsS3Instance.listObjects = listObjectsStub;
+                awsS3Instance.listObjectsV2 = listObjectsStub;
                 awsS3Instance.deleteObjects = deleteObjectsStub;
 
                 return awsS3Instance;
@@ -71,7 +71,7 @@ describe('Plugin: RemoveStorageBucket', () => {
 
         assert(listObjectsStub.calledWithExactly({
           Bucket: 'foo-bucket',
-          Marker: undefined,
+          ContinuationToken: undefined,
         }));
       });
 
@@ -123,7 +123,7 @@ describe('Plugin: RemoveStorageBucket', () => {
                 });
 
                 const awsS3Instance = createStubInstance(AWS.S3);
-                awsS3Instance.listObjects = listObjectsStub;
+                awsS3Instance.listObjectsV2 = listObjectsStub;
 
                 return awsS3Instance;
               }),

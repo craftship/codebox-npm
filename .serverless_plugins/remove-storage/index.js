@@ -16,17 +16,17 @@ class RemoveStorageBucket {
     };
   }
 
-  listAllKeys(marker) {
+  listAllKeys(token) {
     const allKeys = [];
-    return this.s3.listObjects({
+    return this.s3.listObjectsV2({
       Bucket: this.bucket,
-      Marker: marker,
+      ContinuationToken: token,
     }).promise()
    .then((data) => {
       allKeys.push(data.Contents);
 
       if (data.IsTruncated) {
-        return this.listAllKeys(data.NextMarker);
+        return this.listAllKeys(data.NextContinuationToken);
       }
 
       return [].concat.apply([], allKeys).map(
