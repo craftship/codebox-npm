@@ -3,6 +3,7 @@ import AWS from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependenc
 export default class Storage {
   constructor({ region, bucket }) {
     this.S3 = new AWS.S3({
+      signatureVersion: 'v4',
       region,
       params: {
         Bucket: bucket,
