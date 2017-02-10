@@ -2,7 +2,9 @@
 import AWS from 'aws-sdk';
 import { execFile as exec } from 'child_process';
 
-const S3 = new AWS.S3();
+const S3 = new AWS.S3({
+  signatureVersion: 'v4',
+});
 
 export default {
   package: {
