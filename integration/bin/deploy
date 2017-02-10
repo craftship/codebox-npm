@@ -23,6 +23,7 @@ slsDeploy.stderr.on('data', (data) => {
 });
 
 slsDeploy.stdout.on('data', (data) => {
+  console.log(data.toString());
   if (!registryUrl) {
     const registryRegex = new RegExp('https://.+?(?={name})');
     const urls = registryRegex.exec(data.toString());
