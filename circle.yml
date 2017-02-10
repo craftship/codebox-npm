@@ -11,5 +11,5 @@ test:
   override:
     - npm run test
     - npm run coveralls
-    - case $CIRCLE_NODE_INDEX in 0) ./bin/integration-test latest ;; 1) ./bin/integration-test lts ;; esac:
-        parallel: true
+      # - case $CIRCLE_NODE_INDEX in 0) ./bin/integration-test latest ;; 1) ./bin/integration-test lts ;; esac:
+      #  parallel: true
