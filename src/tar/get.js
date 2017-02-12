@@ -1,11 +1,14 @@
 import npm from '../adapters/npm';
 import S3 from '../adapters/s3';
+import Logger from '../adapters/logger';
 
 export default async (event, context, callback) => {
-  const { registry, bucket, region } = process.env;
+  const { registry, bucket, region, logTopic } = process.env;
+  const storage = new S3({ region, bucket });
+  const log = new Logger('tar:get', { region, topic: logTopic });
+
   const name = `${decodeURIComponent(event.name)}`;
   const tarName = `${decodeURIComponent(event.tar)}`;
-  const storage = new S3({ region, bucket });
 
   try {
     const fileName = tarName.replace(`${name}-`, '');
@@ -21,6 +24,8 @@ export default async (event, context, callback) => {
         return callback(npmError);
       }
     }
+
+    await log.error(storageError);
 
     return callback(storageError);
   }

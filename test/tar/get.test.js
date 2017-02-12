@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import Storage from '../../src/adapters/s3';
+import Logger from '../../src/adapters/logger';
 import subject from '../../src/tar/get';
 
 describe('GET /registry/{name}/-/{tar}', () => {
@@ -7,6 +8,8 @@ describe('GET /registry/{name}/-/{tar}', () => {
   let callback;
   let storageSpy;
   let storageInstance;
+  let loggerInstance;
+  let loggerSpy;
 
   beforeEach(() => {
     const env = {
@@ -17,12 +20,23 @@ describe('GET /registry/{name}/-/{tar}', () => {
 
     process.env = env;
 
+    loggerSpy = spy(() => {
+      loggerInstance = createStubInstance(Logger);
+
+      loggerInstance.info = stub();
+      loggerInstance.error = stub();
+
+      return loggerInstance;
+    });
+
     event = {
       name: 'foo-bar-package',
       tar: 'foo-bar-package-1.0.0.tgz',
     };
 
     callback = stub();
+
+    subject.__Rewire__('Logger', loggerSpy);
   });
 
   context('tar exists in private registry', () => {
@@ -137,5 +151,9 @@ describe('GET /registry/{name}/-/{tar}', () => {
     afterEach(() => {
       subject.__ResetDependency__('S3');
     });
+  });
+
+  afterEach(() => {
+    subject.__ResetDependency__('Logger');
   });
 });
