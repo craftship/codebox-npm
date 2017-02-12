@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import Storage from '../../src/adapters/s3';
+import Logger from '../../src/adapters/logger';
 import pkg from '../fixtures/package';
 
 import subject from '../../src/dist-tags/put';
@@ -9,6 +10,8 @@ describe('PUT registry/-/package/{name}/dist-tags/{tag}', () => {
   let callback;
   let storageSpy;
   let storageInstance;
+  let loggerInstance;
+  let loggerSpy;
 
   beforeEach(() => {
     const env = {
@@ -17,6 +20,15 @@ describe('PUT registry/-/package/{name}/dist-tags/{tag}', () => {
     };
 
     process.env = env;
+
+    loggerSpy = spy(() => {
+      loggerInstance = createStubInstance(Logger);
+
+      loggerInstance.info = stub();
+      loggerInstance.error = stub();
+
+      return loggerInstance;
+    });
 
     event = {
       pathParameters: {
@@ -29,6 +41,8 @@ describe('PUT registry/-/package/{name}/dist-tags/{tag}', () => {
     };
 
     callback = stub();
+
+    subject.__Rewire__('Logger', loggerSpy);
   });
 
   describe('dist-tags add', () => {
@@ -132,5 +146,9 @@ describe('PUT registry/-/package/{name}/dist-tags/{tag}', () => {
         subject.__ResetDependency__('S3');
       });
     });
+  });
+
+  afterEach(() => {
+    subject.__ResetDependency__('Logger');
   });
 });
