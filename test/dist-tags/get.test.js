@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import Storage from '../../src/adapters/s3';
+import Logger from '../../src/adapters/logger';
 import pkg from '../fixtures/package';
 
 import subject from '../../src/dist-tags/get';
@@ -9,6 +10,8 @@ describe('GET /registry/-/package/{name}/dist-tags', () => {
   let callback;
   let storageSpy;
   let storageInstance;
+  let loggerInstance;
+  let loggerSpy;
 
   beforeEach(() => {
     const env = {
@@ -19,6 +22,15 @@ describe('GET /registry/-/package/{name}/dist-tags', () => {
 
     process.env = env;
 
+    loggerSpy = spy(() => {
+      loggerInstance = createStubInstance(Logger);
+
+      loggerInstance.info = stub();
+      loggerInstance.error = stub();
+
+      return loggerInstance;
+    });
+
     event = {
       pathParameters: {
         name: 'foo-bar-package',
@@ -26,6 +38,8 @@ describe('GET /registry/-/package/{name}/dist-tags', () => {
     };
 
     callback = stub();
+
+    subject.__Rewire__('Logger', loggerSpy);
   });
 
   describe('dist-tags ls', () => {
@@ -191,5 +205,9 @@ describe('GET /registry/-/package/{name}/dist-tags', () => {
         subject.__ResetDependency__('S3');
       });
     });
+  });
+
+  afterEach(() => {
+    subject.__ResetDependency__('Logger');
   });
 });

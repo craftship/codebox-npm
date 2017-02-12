@@ -1,9 +1,12 @@
 import S3 from './adapters/s3';
+import Logger from './adapters/logger';
 
 export default async ({ pathParameters, body }, context, callback) => {
-  const { bucket, region } = process.env;
-  const name = `${decodeURIComponent(pathParameters.name)}`;
+  const { bucket, region, logTopic } = process.env;
+  const log = new Logger('package:put', { region, topic: logTopic });
   const storage = new S3({ region, bucket });
+
+  const name = `${decodeURIComponent(pathParameters.name)}`;
 
   const pkg = JSON.parse(body);
   const tag = Object.keys(pkg['dist-tags'])[0];
@@ -53,6 +56,12 @@ export default async ({ pathParameters, body }, context, callback) => {
       JSON.stringify(json),
     );
 
+    await log.info({
+      name: json.name,
+      version: json['dist-tags'].latest,
+      'dist-tags': json['dist-tags'],
+    });
+
     return callback(null, {
       statusCode: 200,
       body: JSON.stringify({
@@ -60,6 +69,8 @@ export default async ({ pathParameters, body }, context, callback) => {
       }),
     });
   } catch (putError) {
+    await log.error(putError);
+
     return callback(null, {
       statusCode: 500,
       body: JSON.stringify({

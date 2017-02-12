@@ -4,6 +4,7 @@ plugins:
   - environment-variables
   - remove-storage
   - serverless-webpack
+  - log-topic
   - content-handling
 
 service: yith
@@ -30,9 +31,10 @@ provider:
         - "logs:CreateLogGroup"
         - "logs:CreateLogStream"
         - "logs:PutLogEvents"
-        - "apigateway:POST"
+        - "sns:Publish"
       Resource:
         - "arn:aws:s3:::${self:provider.environment.bucket}*"
+        - "arn:aws:sns:*"
         - "arn:aws:apigateway:*"
 
 functions:

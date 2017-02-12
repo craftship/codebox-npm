@@ -8,3 +8,4 @@ globals:
   stub: true
   spy: true
   createStubInstance: true
+  useFakeTimers: true

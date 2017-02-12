@@ -1,9 +1,12 @@
 import S3 from '../adapters/s3';
+import Logger from '../adapters/logger';
 
 export default async ({ pathParameters }, context, callback) => {
-  const { bucket, region } = process.env;
-  const name = `${decodeURIComponent(pathParameters.name)}`;
+  const { bucket, region, logTopic } = process.env;
   const storage = new S3({ region, bucket });
+  const log = new Logger('dist-tags:delete', { region, topic: logTopic });
+
+  const name = `${decodeURIComponent(pathParameters.name)}`;
 
   try {
     const pkgBuffer = await storage.get(`${name}/index.json`);
@@ -15,6 +18,12 @@ export default async ({ pathParameters }, context, callback) => {
       JSON.stringify(json),
     );
 
+    await log.info({
+      name: json.name,
+      tag: pathParameters.tag,
+      'dist-tags': json['dist-tags'],
+    });
+
     return callback(null, {
       statusCode: 200,
       body: JSON.stringify({
@@ -24,6 +33,8 @@ export default async ({ pathParameters }, context, callback) => {
       }),
     });
   } catch (storageError) {
+    await log.error(storageError);
+
     return callback(null, {
       statusCode: 500,
       body: JSON.stringify({

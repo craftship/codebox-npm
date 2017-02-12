@@ -1,10 +1,13 @@
 import npm from '../adapters/npm';
 import S3 from '../adapters/s3';
+import Logger from '../adapters/logger';
 
 export default async ({ pathParameters }, context, callback) => {
-  const { registry, bucket, region } = process.env;
-  const name = `${decodeURIComponent(pathParameters.name)}`;
+  const { registry, bucket, region, logTopic } = process.env;
   const storage = new S3({ region, bucket });
+  const log = new Logger('dist-tags:get', { region, topic: logTopic });
+
+  const name = `${decodeURIComponent(pathParameters.name)}`;
 
   try {
     const pkgBuffer = await storage.get(`${name}/index.json`);
@@ -31,6 +34,8 @@ export default async ({ pathParameters }, context, callback) => {
         });
       }
     }
+
+    await log.error(storageError);
 
     return callback(null, {
       statusCode: 500,

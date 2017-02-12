@@ -1,5 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import Storage from '../src/adapters/s3';
+import Logger from '../src/adapters/logger';
 import pkg from './fixtures/package';
 
 import subject from '../src/get';
@@ -9,6 +10,8 @@ describe('GET /registry/{name}', () => {
   let callback;
   let storageSpy;
   let storageInstance;
+  let loggerInstance;
+  let loggerSpy;
 
   beforeEach(() => {
     const env = {
@@ -19,6 +22,15 @@ describe('GET /registry/{name}', () => {
 
     process.env = env;
 
+    loggerSpy = spy(() => {
+      loggerInstance = createStubInstance(Logger);
+
+      loggerInstance.info = stub();
+      loggerInstance.error = stub();
+
+      return loggerInstance;
+    });
+
     event = {
       pathParameters: {
         name: 'foo-bar-package',
@@ -26,6 +38,8 @@ describe('GET /registry/{name}', () => {
     };
 
     callback = stub();
+
+    subject.__Rewire__('Logger', loggerSpy);
   });
 
   context('package does not exist in private registry', () => {
@@ -201,5 +215,9 @@ describe('GET /registry/{name}', () => {
       subject.__ResetDependency__('npm');
       subject.__ResetDependency__('S3');
     });
+  });
+
+  afterEach(() => {
+    subject.__ResetDependency__('Logger');
   });
 });
