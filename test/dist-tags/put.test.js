@@ -51,7 +51,7 @@ describe('PUT registry/-/package/{name}/dist-tags/{tag}', () => {
         storageSpy = spy(() => {
           storageInstance = createStubInstance(Storage);
 
-          const pkgDistTags = JSON.parse(pkg({
+          const pkgDistTags = JSON.parse(pkg.withAttachments({
             major: 1,
             minor: 0,
             patch: 0,
@@ -79,7 +79,7 @@ describe('PUT registry/-/package/{name}/dist-tags/{tag}', () => {
         await subject(event, stub(), callback);
 
         const pkgInitial = JSON.parse(
-          pkg({
+          pkg.withAttachments({
             major: 1,
             minor: 0,
             patch: 0,
@@ -119,7 +119,7 @@ describe('PUT registry/-/package/{name}/dist-tags/{tag}', () => {
         storageSpy = spy(() => {
           storageInstance = createStubInstance(Storage);
 
-          storageInstance.get.returns(pkg({
+          storageInstance.get.returns(pkg.withoutAttachments({
             major: 1,
             minor: 0,
             patch: 0,
