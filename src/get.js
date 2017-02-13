@@ -11,10 +11,12 @@ export default async (event, context, callback) => {
 
   try {
     const pkgBuffer = await storage.get(`${name}/index.json`);
+    const json = JSON.parse(pkgBuffer.toString());
+    json._attachments = {}; // eslint-disable-line no-underscore-dangle
 
     return callback(null, {
       statusCode: 200,
-      body: pkgBuffer.toString(),
+      body: JSON.stringify(json),
     });
   } catch (storageError) {
     if (storageError.code === 'NoSuchKey') {
