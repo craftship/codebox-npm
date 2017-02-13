@@ -48,7 +48,7 @@ describe('GET /registry/-/package/{name}/dist-tags', () => {
         storageSpy = spy(() => {
           storageInstance = createStubInstance(Storage);
 
-          storageInstance.get.returns(pkg({
+          storageInstance.get.returns(pkg.withAttachments({
             major: 1,
             minor: 0,
             patch: 0,
@@ -128,7 +128,7 @@ describe('GET /registry/-/package/{name}/dist-tags', () => {
 
       beforeEach(() => {
         npmPackageStub = stub().returns(
-          JSON.parse(pkg({
+          JSON.parse(pkg.withoutAttachments({
             major: 1,
             minor: 0,
             patch: 0,

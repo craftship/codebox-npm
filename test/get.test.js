@@ -47,7 +47,7 @@ describe('GET /registry/{name}', () => {
 
     beforeEach(() => {
       npmPackageStub = stub().returns(
-        JSON.parse(pkg({
+        JSON.parse(pkg.withoutAttachments({
           major: 1,
           minor: 0,
           patch: 0,
@@ -88,7 +88,7 @@ describe('GET /registry/{name}', () => {
 
       assert(callback.calledWithExactly(null, {
         statusCode: 200,
-        body: pkg({
+        body: pkg.withoutAttachments({
           major: 1,
           minor: 0,
           patch: 0,
@@ -107,7 +107,7 @@ describe('GET /registry/{name}', () => {
       storageSpy = spy(() => {
         storageInstance = createStubInstance(Storage);
 
-        storageInstance.get.returns(pkg({
+        storageInstance.get.returns(pkg.withAttachments({
           major: 1,
           minor: 0,
           patch: 0,
@@ -132,7 +132,7 @@ describe('GET /registry/{name}', () => {
 
       assert(callback.calledWithExactly(null, {
         statusCode: 200,
-        body: pkg({
+        body: pkg.withoutAttachments({
           major: 1,
           minor: 0,
           patch: 0,

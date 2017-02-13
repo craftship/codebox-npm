@@ -30,7 +30,7 @@ describe('PUT /registry/{name}', () => {
     });
 
     event = version => ({
-      body: pkg(version),
+      body: pkg.withAttachments(version),
       pathParameters: {
         name: 'foo-bar-package',
       },
@@ -107,7 +107,7 @@ describe('PUT /registry/{name}', () => {
 
         assert(storageInstance.put.calledWithExactly(
           'foo-bar-package/index.json',
-          pkg({
+          pkg.withAttachments({
             major: 1,
             minor: 0,
             patch: 0,
@@ -138,7 +138,7 @@ describe('PUT /registry/{name}', () => {
         storageSpy = spy(() => {
           storageInstance = createStubInstance(Storage);
 
-          storageInstance.get.returns(pkg({
+          storageInstance.get.returns(pkg.withAttachments({
             major: 1,
             minor: 0,
             patch: 0,
@@ -197,8 +197,8 @@ describe('PUT /registry/{name}', () => {
           patch: 0,
         }), stub(), callback);
 
-        const pkg1 = JSON.parse(pkg({ major: 1, minor: 0, patch: 0 }).toString());
-        const pkg2 = JSON.parse(pkg({ major: 2, minor: 0, patch: 0 }).toString());
+        const pkg1 = JSON.parse(pkg.withAttachments({ major: 1, minor: 0, patch: 0 }).toString());
+        const pkg2 = JSON.parse(pkg.withAttachments({ major: 2, minor: 0, patch: 0 }).toString());
 
         const versions = Object.assign(pkg1.versions, pkg2.versions);
         const attachments = Object.assign(pkg1._attachments, pkg2._attachments);
@@ -238,7 +238,7 @@ describe('PUT /registry/{name}', () => {
         storageSpy = spy(() => {
           storageInstance = createStubInstance(Storage);
 
-          storageInstance.get.returns(pkg({
+          storageInstance.get.returns(pkg.withAttachments({
             major: 1,
             minor: 0,
             patch: 0,
@@ -273,7 +273,7 @@ describe('PUT /registry/{name}', () => {
         storageSpy = spy(() => {
           storageInstance = createStubInstance(Storage);
 
-          storageInstance.get.returns(pkg({
+          storageInstance.get.returns(pkg.withAttachments({
             major: 1,
             minor: 0,
             patch: 0,
