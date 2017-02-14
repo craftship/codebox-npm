@@ -34,8 +34,7 @@ provider:
         - "sns:Publish"
       Resource:
         - "arn:aws:s3:::${self:provider.environment.bucket}*"
-        - "arn:aws:sns:*"
-        - "arn:aws:apigateway:*"
+        - "arn:aws:sns:${self:provider.region}:*:${self:service}-${opt:stage}-log"
 
 functions:
   authorizerGithub:
