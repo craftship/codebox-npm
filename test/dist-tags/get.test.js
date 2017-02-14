@@ -32,6 +32,12 @@ describe('GET /registry/-/package/{name}/dist-tags', () => {
     });
 
     event = {
+      requestContext: {
+        authorizer: {
+          username: 'foo',
+          avatar: 'https://example.com',
+        },
+      },
       pathParameters: {
         name: 'foo-bar-package',
       },

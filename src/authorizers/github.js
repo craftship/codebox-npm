@@ -71,7 +71,11 @@ export default async ({ methodArn, authorizationToken }, context, callback) => {
   });
 
   try {
-    const { user } = await github.authorization.check({
+    const {
+      user,
+      updated_at,
+      created_at,
+    } = await github.authorization.check({
       client_id: process.env.githubClientId,
       access_token: token,
     });
@@ -81,12 +85,21 @@ export default async ({ methodArn, authorizationToken }, context, callback) => {
       isAdmin = process.env.admins.split(',').indexOf(user.login) > -1;
     }
 
-    return callback(null, generatePolicy({
+    const policy = generatePolicy({
       effect: 'Allow',
       methodArn,
       token,
       isAdmin,
-    }));
+    });
+
+    policy.context = {
+      username: user.login,
+      avatar: user.avatar_url,
+      updatedAt: updated_at,
+      createdAt: created_at,
+    };
+
+    return callback(null, policy);
   } catch (error) {
     return callback(null, generatePolicy({
       token: tokenParts[1],

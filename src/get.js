@@ -4,6 +4,10 @@ import Logger from './adapters/logger';
 
 export default async (event, context, callback) => {
   const { registry, bucket, region, logTopic } = process.env;
+  const user = {
+    name: event.requestContext.authorizer.username,
+    avatar: event.requestContext.authorizer.avatar,
+  };
   const storage = new S3({ region, bucket });
   const log = new Logger('package:get', { region, topic: logTopic });
 
@@ -39,7 +43,7 @@ export default async (event, context, callback) => {
       }
     }
 
-    await log.error(storageError);
+    await log.error(user, storageError);
 
     return callback(null, {
       statusCode: 500,

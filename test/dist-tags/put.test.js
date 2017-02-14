@@ -31,6 +31,12 @@ describe('PUT registry/-/package/{name}/dist-tags/{tag}', () => {
     });
 
     event = {
+      requestContext: {
+        authorizer: {
+          username: 'foo',
+          avatar: 'https://example.com',
+        },
+      },
       pathParameters: {
         name: 'foo-bar-package',
         tag: 'foo',
