@@ -2,8 +2,15 @@ import npm from '../adapters/npm';
 import S3 from '../adapters/s3';
 import Logger from '../adapters/logger';
 
-export default async ({ pathParameters }, context, callback) => {
+export default async ({
+  requestContext,
+  pathParameters,
+}, context, callback) => {
   const { registry, bucket, region, logTopic } = process.env;
+  const user = {
+    name: requestContext.authorizer.username,
+    avatar: requestContext.authorizer.avatar,
+  };
   const storage = new S3({ region, bucket });
   const log = new Logger('dist-tags:get', { region, topic: logTopic });
 
@@ -35,7 +42,7 @@ export default async ({ pathParameters }, context, callback) => {
       }
     }
 
-    await log.error(storageError);
+    await log.error(user, storageError);
 
     return callback(null, {
       statusCode: 500,

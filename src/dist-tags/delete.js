@@ -1,8 +1,15 @@
 import S3 from '../adapters/s3';
 import Logger from '../adapters/logger';
 
-export default async ({ pathParameters }, context, callback) => {
+export default async ({
+  requestContext,
+  pathParameters,
+}, context, callback) => {
   const { bucket, region, logTopic } = process.env;
+  const user = {
+    name: requestContext.authorizer.username,
+    avatar: requestContext.authorizer.avatar,
+  };
   const storage = new S3({ region, bucket });
   const log = new Logger('dist-tags:delete', { region, topic: logTopic });
 
@@ -18,7 +25,7 @@ export default async ({ pathParameters }, context, callback) => {
       JSON.stringify(json),
     );
 
-    await log.info({
+    await log.info(user, {
       name: json.name,
       tag: pathParameters.tag,
       'dist-tags': json['dist-tags'],
@@ -33,7 +40,7 @@ export default async ({ pathParameters }, context, callback) => {
       }),
     });
   } catch (storageError) {
-    await log.error(storageError);
+    await log.error(user, storageError);
 
     return callback(null, {
       statusCode: 500,

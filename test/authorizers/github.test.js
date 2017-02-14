@@ -134,7 +134,14 @@ describe('GitHub Authorizer', () => {
         gitHubSpy = spy(() => {
           gitHubInstance = createStubInstance(GitHub);
           authStub = stub();
-          checkAuthStub = stub().returns({ user: { login: 'foo-user' } });
+          checkAuthStub = stub().returns({
+            user: {
+              login: 'foo-user',
+              avatar_url: 'https://example.com',
+            },
+            created_at: '2001-01-01T00:00:00Z',
+            updated_at: '2001-02-01T00:00:00Z',
+          });
 
           gitHubInstance.authenticate = authStub;
           gitHubInstance.authorization = {
@@ -193,6 +200,12 @@ describe('GitHub Authorizer', () => {
               },
             ],
           },
+          context: {
+            username: 'foo-user',
+            avatar: 'https://example.com',
+            createdAt: '2001-01-01T00:00:00Z',
+            updatedAt: '2001-02-01T00:00:00Z',
+          },
         }));
       });
 
@@ -216,7 +229,14 @@ describe('GitHub Authorizer', () => {
         gitHubSpy = spy(() => {
           gitHubInstance = createStubInstance(GitHub);
           authStub = stub();
-          checkAuthStub = stub().returns({ user: { login: 'foo-user' } });
+          checkAuthStub = stub().returns({
+            user: {
+              login: 'foo-user',
+              avatar_url: 'https://example.com',
+            },
+            created_at: '2001-01-01T00:00:00Z',
+            updated_at: '2001-02-01T00:00:00Z',
+          });
 
           gitHubInstance.authenticate = authStub;
           gitHubInstance.authorization = {
@@ -274,6 +294,12 @@ describe('GitHub Authorizer', () => {
                 Resource: 'arn:aws:execute-api:foo-region:bar-account:baz-api/foo-stage/DELETE/registry*',
               },
             ],
+          },
+          context: {
+            username: 'foo-user',
+            avatar: 'https://example.com',
+            createdAt: '2001-01-01T00:00:00Z',
+            updatedAt: '2001-02-01T00:00:00Z',
           },
         }));
       });

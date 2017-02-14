@@ -3,11 +3,17 @@ import AWS from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependenc
 import Subject from '../../src/adapters/logger';
 
 describe('Logger', () => {
+  let user;
   let clock;
   let awsSpy;
   let publishStub;
 
   beforeEach(() => {
+    user = {
+      name: 'foo',
+      avatar: 'https://example.com',
+    };
+
     awsSpy = {
       SNS: spy(() => {
         publishStub = stub().returns({ promise: () => Promise.resolve() });
@@ -31,10 +37,10 @@ describe('Logger', () => {
         topic: 'bar-topic',
       });
 
-      await subject.info({ foo: 'bar' });
+      await subject.info(user, { foo: 'bar' });
 
       assert(publishStub.calledWithExactly({
-        Message: '{"timestamp":"1970-01-01T00:00:00.000Z","level":"info","namespace":"info:foo:bar","body":{"foo":"bar"}}',
+        Message: '{"user":{"name":"foo","avatar":"https://example.com"},"timestamp":"1970-01-01T00:00:00.000Z","level":"info","namespace":"info:foo:bar","body":{"foo":"bar"}}',
         TopicArn: 'bar-topic',
       }));
     });
@@ -50,10 +56,10 @@ describe('Logger', () => {
       const expectedError = new Error('Foo Bar');
       expectedError.stack = 'foo bar stack';
 
-      await subject.error(expectedError);
+      await subject.error(user, expectedError);
 
       assert(publishStub.calledWithExactly({
-        Message: '{"timestamp":"1970-01-01T00:00:00.000Z","level":"error","namespace":"error:foo:bar","body":{"message":"Foo Bar","stack":"foo bar stack"}}',
+        Message: '{"user":{"name":"foo","avatar":"https://example.com"},"timestamp":"1970-01-01T00:00:00.000Z","level":"error","namespace":"error:foo:bar","body":{"message":"Foo Bar","stack":"foo bar stack"}}',
         TopicArn: 'bar-topic',
       }));
     });

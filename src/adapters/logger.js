@@ -18,8 +18,9 @@ export default class Logger {
     }).promise();
   }
 
-  async error({ stack, message }) {
+  async error(user, { stack, message }) {
     const json = {
+      user,
       timestamp: new Date(),
       level: 'error',
       namespace: `error:${this.namespace}`,
@@ -32,8 +33,9 @@ export default class Logger {
     return this.publish(json);
   }
 
-  async info(message) {
+  async info(user, message) {
     const json = {
+      user,
       timestamp: new Date(),
       level: 'info',
       namespace: `info:${this.namespace}`,

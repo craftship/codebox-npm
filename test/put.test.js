@@ -30,6 +30,12 @@ describe('PUT /registry/{name}', () => {
     });
 
     event = version => ({
+      requestContext: {
+        authorizer: {
+          username: 'foo',
+          avatar: 'https://example.com',
+        },
+      },
       body: pkg.withAttachments(version),
       pathParameters: {
         name: 'foo-bar-package',

@@ -1,8 +1,17 @@
 import S3 from './adapters/s3';
 import Logger from './adapters/logger';
 
-export default async ({ pathParameters, body }, context, callback) => {
+export default async ({
+  requestContext,
+  pathParameters,
+  body,
+}, context, callback) => {
   const { bucket, region, logTopic } = process.env;
+  const user = {
+    name: requestContext.authorizer.username,
+    avatar: requestContext.authorizer.avatar,
+  };
+
   const log = new Logger('package:put', { region, topic: logTopic });
   const storage = new S3({ region, bucket });
 
@@ -56,7 +65,7 @@ export default async ({ pathParameters, body }, context, callback) => {
       JSON.stringify(json),
     );
 
-    await log.info({
+    await log.info(user, {
       name: json.name,
       version: json['dist-tags'].latest,
       'dist-tags': json['dist-tags'],
@@ -69,7 +78,7 @@ export default async ({ pathParameters, body }, context, callback) => {
       }),
     });
   } catch (putError) {
-    await log.error(putError);
+    await log.error(user, putError);
 
     return callback(null, {
       statusCode: 500,

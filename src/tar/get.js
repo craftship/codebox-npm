@@ -25,7 +25,7 @@ export default async (event, context, callback) => {
       }
     }
 
-    await log.error(storageError);
+    await log.error(null, storageError);
 
     return callback(storageError);
   }
