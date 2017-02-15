@@ -23,7 +23,7 @@ describe('NPM', () => {
           );
         } catch (error) {
           assert.equal(error.status, 404);
-          assert.equal(error.message, 'Could Not Get Tar: https://example.com/foo-tar');
+          assert.equal(error.message, 'Could Not Find Tar: https://example.com/foo-tar');
         }
       });
 
@@ -81,7 +81,7 @@ describe('NPM', () => {
           );
         } catch (error) {
           assert.equal(error.status, 404);
-          assert.equal(error.message, 'Could Not Get Package: https://example.com/foo-package');
+          assert.equal(error.message, 'Could Not Find Package: https://example.com/foo-package');
         }
       });
 

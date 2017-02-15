@@ -5,7 +5,7 @@ export default {
     const response = await fetch(`${registry}${name}`);
 
     if (!response.ok) {
-      const error = new Error(`Could Not Get Package: ${registry}${name}`);
+      const error = new Error(`Could Not Find Package: ${registry}${name}`);
       error.status = response.status;
       throw error;
     }
@@ -16,7 +16,7 @@ export default {
     const response = await fetch(`${registry}${name}`);
 
     if (!response.ok) {
-      const error = new Error(`Could Not Get Tar: ${registry}${name}`);
+      const error = new Error(`Could Not Find Tar: ${registry}${name}`);
       error.status = response.status;
       throw error;
     }

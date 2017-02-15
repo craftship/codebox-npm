@@ -32,7 +32,9 @@ export default async (event, context, callback) => {
           body: JSON.stringify(data),
         });
       } catch (npmError) {
-        await log.error(npmError);
+        if (npmError.status === 500) {
+          await log.error(user, npmError);
+        }
 
         return callback(null, {
           statusCode: npmError.status,
