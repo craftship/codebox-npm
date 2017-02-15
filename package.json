@@ -1,6 +1,6 @@
 {
   "name": "yith",
-  "version": "0.8.2",
+  "version": "0.8.3",
   "description": "Serverless private npm registry",
   "main": "index.js",
   "devDependencies": {
