@@ -88,6 +88,7 @@ You can then reuse this build step for all of your repositories using your priva
 Upon deploying yith will create a new SNS Topic specifically for logging.  The console will log the SNS topic ARN you can use to create your own loggers using [Serverless](https://serverless.com/). Deploy your log functions into the same account and you can log with whatever tool you wish.  We hope to use this to drive a live web interface plotting npm usage within your company.
 
 An example of using slack to log activity and errors can be found here:
+
 [https://github.com/craftship/yith-log-slack](https://github.com/craftship/yith-log-slack)
 
 ## Other Resources
