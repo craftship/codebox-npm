@@ -1,3 +1,4 @@
+import npm from './adapters/npm';
 import S3 from './adapters/s3';
 import Logger from './adapters/logger';
 
@@ -6,17 +7,60 @@ export default async ({
   pathParameters,
   body,
 }, context, callback) => {
-  const { bucket, region, logTopic } = process.env;
+  const {
+    registry,
+    bucket,
+    region,
+    logTopic,
+  } = process.env;
+
   const user = {
     name: requestContext.authorizer.username,
     avatar: requestContext.authorizer.avatar,
   };
 
-  const log = new Logger('package:put', { region, topic: logTopic });
-  const storage = new S3({ region, bucket });
+  const log = new Logger(
+    'package:put', {
+      region,
+      topic: logTopic,
+    });
+
+  const storage = new S3({
+    region,
+    bucket,
+  });
+
+  // Ensure package has unique name on npm
+  try {
+    const data = await npm.package(
+      registry,
+      pathParameters.name,
+    );
+
+    if (data._id) { // eslint-disable-line no-underscore-dangle
+      return callback(null, {
+        statusCode: 403,
+        body: JSON.stringify({
+          success: false,
+          error: 'Your package name needs to be unique to the public npm registry.',
+        }),
+      });
+    }
+  } catch (npmError) {
+    if (npmError.status === 500) {
+      await log.error(user, npmError);
+
+      return callback(null, {
+        statusCode: npmError.status,
+        body: JSON.stringify({
+          success: false,
+          error: npmError.message,
+        }),
+      });
+    }
+  }
 
   const name = `${decodeURIComponent(pathParameters.name)}`;
-
   const pkg = JSON.parse(body);
   const tag = Object.keys(pkg['dist-tags'])[0];
   const version = pkg['dist-tags'][tag];
