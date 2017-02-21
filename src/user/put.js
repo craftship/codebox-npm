@@ -7,7 +7,7 @@ export default async ({ body }, context, callback) => {
     password,
   } = JSON.parse(body);
 
-  const scopes = ['user:email'];
+  const scopes = ['user:email', 'read:org'];
   const nameParts = name.split('.');
   const username = nameParts[0];
   const otp = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
