@@ -239,6 +239,58 @@ describe('PUT /registry/{name}', () => {
       });
     });
 
+    context('publish package id that exists on npm', () => {
+      let npmPackageStub;
+
+      beforeEach(() => {
+        npmPackageStub = stub().returns(
+          JSON.parse(pkg.withoutAttachments({
+            major: 1,
+            minor: 0,
+            patch: 0,
+          }).toString()));
+
+        const mockNpm = {
+          package: npmPackageStub,
+        };
+
+        storageSpy = spy(() => {
+          storageInstance = createStubInstance(Storage);
+
+          storageInstance.get.returns(pkg.withAttachments({
+            major: 1,
+            minor: 0,
+            patch: 0,
+          }));
+
+          return storageInstance;
+        });
+
+        subject.__Rewire__({
+          S3: storageSpy,
+          npm: mockNpm,
+        });
+      });
+
+      it('should return 403 informing you require a unqiue package name', async () => {
+        await subject(event({
+          major: 1,
+          minor: 0,
+          patch: 0,
+        }), stub(), callback);
+
+        assert(callback.calledWithExactly(null, {
+          statusCode: 403,
+          body: '{"success":false,"error":"Your package name needs to be unique to the public npm registry."}',
+        }));
+      });
+
+      afterEach(() => {
+        subject.__ResetDependency__('S3');
+        subject.__ResetDependency__('npm');
+      });
+    });
+
     context('publishing an existing version', () => {
       beforeEach(() => {
         storageSpy = spy(() => {
