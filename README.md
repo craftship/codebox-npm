@@ -2,7 +2,7 @@
 [![CircleCI Status](https://circleci.com/gh/craftship/yith.svg?style=shield)](https://circleci.com/gh/craftship/yith)
 [![Coverage Status](https://coveralls.io/repos/github/craftship/yith/badge.svg?branch=master&cb=1)](https://coveralls.io/github/craftship/yith?branch=master)
 
-<img src="https://s3-eu-west-1.amazonaws.com/learn.craftship.io/yith_logo.png" height="150"/>
+<img src="https://s3-eu-west-1.amazonaws.com/learn.craftship.io/codebox_logo.png" height="150"/>
 
 ## Overview
 Yith is a serverless npm registry to allow companies that wish to keep their intellectual property. It allows sharing of npm modules within a company but additionally allows access to all of the modules on public npm. One other major difference is that it replaces `npm login` authentication to be via github / github enterprise.  Users are always required to be authenticated when using yith as their npm registry.
