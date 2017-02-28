@@ -31,7 +31,7 @@ export default async ({ body }, context, callback) => {
       scopes,
       client_id: process.env.githubClientId,
       client_secret: process.env.githubSecret,
-      note: 'yith private npm registry',
+      note: 'codebox private npm registry',
       headers: {
         'X-GitHub-OTP': otp,
       },
@@ -49,7 +49,7 @@ export default async ({ body }, context, callback) => {
         scopes,
         client_id: process.env.githubClientId,
         client_secret: process.env.githubSecret,
-        note: 'yith private npm registry',
+        note: 'codebox private npm registry',
         headers: {
           'X-GitHub-OTP': otp,
         },

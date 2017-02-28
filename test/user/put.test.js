@@ -68,7 +68,7 @@ describe('PUT /registry/-/user/{id}', () => {
           scopes: ['user:email'],
           client_id: 'foo-client-id',
           client_secret: 'bar-secret',
-          note: 'yith private npm registry',
+          note: 'codebox private npm registry',
           headers: {
             'X-GitHub-OTP': '123456',
           },
@@ -127,7 +127,7 @@ describe('PUT /registry/-/user/{id}', () => {
           scopes: ['user:email'],
           client_id: 'foo-client-id',
           client_secret: 'bar-secret',
-          note: 'yith private npm registry',
+          note: 'codebox private npm registry',
           headers: {
             'X-GitHub-OTP': '',
           },
@@ -216,7 +216,7 @@ describe('PUT /registry/-/user/{id}', () => {
           scopes: ['user:email'],
           client_id: 'foo-client-id',
           client_secret: 'bar-secret',
-          note: 'yith private npm registry',
+          note: 'codebox private npm registry',
           headers: {
             'X-GitHub-OTP': '',
           },
@@ -230,7 +230,7 @@ describe('PUT /registry/-/user/{id}', () => {
           scopes: ['user:email'],
           client_id: 'foo-client-id',
           client_secret: 'bar-secret',
-          note: 'yith private npm registry',
+          note: 'codebox private npm registry',
           headers: {
             'X-GitHub-OTP': '',
           },

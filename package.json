@@ -1,5 +1,5 @@
 {
-  "name": "yith",
+  "name": "codebox-npm",
   "version": "0.9.0",
   "description": "Serverless private npm registry",
   "main": "index.js",
@@ -30,20 +30,21 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/craftship/yith.git"
+    "url": "git+https://github.com/craftship/codebox-npm.git"
   },
   "keywords": [
-    "yith",
+    "codebox",
     "npm",
     "registry",
-    "private"
+    "private",
+    "enterprise"
   ],
   "author": "Craftship Ltd <hello@craftship.io>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/craftship/yith/issues"
+    "url": "https://github.com/craftship/codebox-npm/issues"
   },
-  "homepage": "https://github.com/craftship/yith#readme",
+  "homepage": "https://github.com/craftship/codebox-npm#readme",
   "dependencies": {
     "babel-polyfill": "^6.22.0",
     "babel-runtime": "^6.22.0",
