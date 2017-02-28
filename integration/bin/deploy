@@ -12,7 +12,7 @@ if (process.env.CIRCLE_SHA1) {
   stage = `${process.env.CIRCLE_SHA1.substring(0, 8)}${process.env.CIRCLE_NODE_INDEX}`;
 }
 
-console.log(`Deploying yith ${stage}...`);
+console.log(`Deploying codebox ${stage}...`);
 
 const slsDeploy = spawn('sls', ['deploy', '--stage', stage]);
 
@@ -34,7 +34,7 @@ slsDeploy.stdout.on('data', (data) => {
 
 slsDeploy.on('exit', (code) => {
   if (code === 0) {
-    console.log(`Finished deployment for yith ${stage} : code ${code}`);
+    console.log(`Finished deployment for codebox ${stage} : code ${code}`);
   } else {
     console.log(`Error deploying code ${code}`);
   }

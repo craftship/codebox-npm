@@ -1,11 +1,11 @@
 [![Serverless](http://public.serverless.com/badges/v3.svg)](http://www.serverless.com)
-[![CircleCI Status](https://circleci.com/gh/craftship/yith.svg?style=shield)](https://circleci.com/gh/craftship/yith)
-[![Coverage Status](https://coveralls.io/repos/github/craftship/yith/badge.svg?branch=master&cb=1)](https://coveralls.io/github/craftship/yith?branch=master)
+[![CircleCI Status](https://circleci.com/gh/craftship/codebox-npm.svg?style=shield)](https://circleci.com/gh/craftship/codebox-npm)
+[![Coverage Status](https://coveralls.io/repos/github/craftship/codebox-npm/badge.svg?branch=master&cb=1)](https://coveralls.io/github/craftship/codebox-npm?branch=master)
 
 <img src="https://s3-eu-west-1.amazonaws.com/learn.craftship.io/codebox_logo.png" height="150"/>
 
 ## Overview
-Yith is a serverless npm registry to allow companies that wish to keep their intellectual property. It allows sharing of npm modules within a company but additionally allows access to all of the modules on public npm. One other major difference is that it replaces `npm login` authentication to be via github / github enterprise.  Users are always required to be authenticated when using yith as their npm registry.
+Codebox npm is a serverless npm registry to allow companies that wish to keep their intellectual property. It allows sharing of npm modules within a company but additionally allows access to all of the modules on public npm. One other major difference is that it replaces `npm login` authentication to be via github / github enterprise.  Users are always required to be authenticated when using codebox as their npm registry.
 
 It is currently compatible with the latest version of the npm cli.
 
@@ -19,18 +19,18 @@ The quickest way to deploy your own npm registry from you local machine is to fo
 * Latest version of Serverless installed globally (`npm install serverless -g` or `yarn global add serverless`).
 
 #### Steps
-* `serverless install --url https://github.com/craftship/yith/tree/0.9.0 --name my-npm-registry` - pick whichever name you prefer for your registry
+* `serverless install --url https://github.com/craftship/codebox-npm/tree/0.9.0 --name my-npm-registry` - pick whichever name you prefer for your registry
 * `cd my-npm-registry`
 * `npm install`
 * Setup your environment variables:
 ```
-export YITH_REGION="eu-west-1" # Set the AWS region you wish your registry to be deployed to
-export YITH_ADMINS="" # Comma seperated list of github usernames (e.g. "jon,kadi"), these users will be the only ones able to publish
-export YITH_REGISTRY="https://registry.npmjs.org/" # The NPM mirror you wish to proxy through to
-export YITH_BUCKET="my-npm-registry-storage" # The name of the bucket in which you wish to store your packages
-export YITH_GITHUB_URL="https://api.github.com/" # The GitHub / GitHub Enterprise **api** url
-export YITH_GITHUB_CLIENT_ID="client_id" # The client id for your GitHub application
-export YITH_GITHUB_SECRET="secret" # The secret for your GitHub application
+export CODEBOX_REGION="eu-west-1" # Set the AWS region you wish your registry to be deployed to
+export CODEBOX_ADMINS="" # Comma seperated list of github usernames (e.g. "jon,kadi"), these users will be the only ones able to publish
+export CODEBOX_REGISTRY="https://registry.npmjs.org/" # The NPM mirror you wish to proxy through to
+export CODEBOX_BUCKET="my-npm-registry-storage" # The name of the bucket in which you wish to store your packages
+export CODEBOX_GITHUB_URL="https://api.github.com/" # The GitHub / GitHub Enterprise **api** url
+export CODEBOX_GITHUB_CLIENT_ID="client_id" # The client id for your GitHub application
+export CODEBOX_GITHUB_SECRET="secret" # The secret for your GitHub application
 ```
 * `serverless deploy --stage prod` (pick which ever stage you wish)
 * `npm set registry <url>` - `<url>` being the base url shown in the terminal after deployment completes, such as:
@@ -56,7 +56,7 @@ To login you can use the `npm login` cli command, if you have 2FA enabled you wi
 You are now able to use npm commands as normal.
 
 ## Admins / Publishing Packages
-`npm publish` works as it normally does via the npm CLI.  By default all users that authenticate have read only access.  If you wish to allow publish rights then you need to set the `YITH_ADMINS` environment variable to a comma separated list of GitHub usernames such as `jonsharratt,kadikraman` and re-deploy.
+`npm publish` works as it normally does via the npm CLI.  By default all users that authenticate have read only access.  If you wish to allow publish rights then you need to set the `CODEBOX_ADMINS` environment variable to a comma separated list of GitHub usernames such as `jonsharratt,kadikraman` and re-deploy.
 
 ## Setup with your CI
 We recommend creating a GitHub user that can represent your team as a service account.  Once created you can then use that account to `npm login` to the private registry.
@@ -85,14 +85,14 @@ echo "$NPM_REGISTRY_LOGIN_URL:_authToken=$NPM_AUTH_TOKEN" >> .npmrc
 You can then reuse this build step for all of your repositories using your private npm registry.
 
 ## Logging
-Upon deploying yith will create a new SNS Topic specifically for logging.  The console will log the SNS topic ARN you can use to create your own loggers using [Serverless](https://serverless.com/). Deploy your log functions into the same account and you can log with whatever tool you wish.  We hope to use this to drive a live web interface plotting npm usage within your company.
+Upon deploying codebox will create a new SNS Topic specifically for logging.  The console will log the SNS topic ARN you can use to create your own loggers using [Serverless](https://serverless.com/). Deploy your log functions into the same account and you can log with whatever tool you wish.  We hope to use this to drive a live web interface plotting npm usage within your company.
 
 An example of using slack to log activity and errors can be found here:
 
-[https://github.com/craftship/yith-log-slack](https://github.com/craftship/yith-log-slack)
+[https://github.com/craftship/codebox-log-slack](https://github.com/craftship/codebox-log-slack)
 
 ## Other Resources
 
-[Blog](https://craftship.io/open/source/serverless/private/npm/registry/yith/2016/09/26/serverless-yith.html)
+[Blog (Previously named Yith)](https://craftship.io/open/source/serverless/private/npm/registry/yith/2016/09/26/serverless-yith.html)
 
-[FAQ](https://github.com/craftship/yith/wiki/FAQ)
+[FAQ](https://github.com/craftship/codebox-npm/wiki/FAQ)

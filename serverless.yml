@@ -7,20 +7,20 @@ plugins:
   - log-topic
   - content-handling
 
-service: yith
+service: codebox-npm
 
 provider:
   name: aws
   runtime: nodejs4.3
   stage: dev
-  region: ${env:YITH_REGION}
+  region: ${env:CODEBOX_REGION}
   environment:
-    admins: ${env:YITH_ADMINS}
-    registry: ${env:YITH_REGISTRY}
-    githubUrl: ${env:YITH_GITHUB_URL}
-    githubClientId:  ${env:YITH_GITHUB_CLIENT_ID}
-    githubSecret:  ${env:YITH_GITHUB_SECRET}
-    bucket: ${env:YITH_BUCKET}-${opt:stage}
+    admins: ${env:CODEBOX_ADMINS}
+    registry: ${env:CODEBOX_REGISTRY}
+    githubUrl: ${env:CODEBOX_GITHUB_URL}
+    githubClientId:  ${env:CODEBOX_GITHUB_CLIENT_ID}
+    githubSecret:  ${env:CODEBOX_GITHUB_SECRET}
+    bucket: ${env:CODEBOX_BUCKET}-${opt:stage}
     region: ${self:provider.region}
   iamRoleStatements:
     - Effect: "Allow"

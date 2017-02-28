@@ -6,7 +6,7 @@ class LogTopic {
     this.provider = this.serverless.getProvider('aws');
     this.sns = new this.provider.sdk.SNS({
       signatureVersion: 'v4',
-      region: process.env.YITH_REGION,
+      region: process.env.CODEBOX_REGION,
     });
 
     this.hooks = {

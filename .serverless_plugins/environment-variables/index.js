@@ -5,31 +5,31 @@ class EnvironmentVariablesCheck {
 
     this.requiredVars = [
       {
-        name: 'YITH_REGION',
+        name: 'CODEBOX_REGION',
         helpText: 'the AWS region you wish to deploy to.',
       },
       {
-        name: 'YITH_ADMINS',
+        name: 'CODEBOX_ADMINS',
         helpText: 'a comma seperated list of GitHub usernames.',
       },
       {
-        name: 'YITH_REGISTRY',
+        name: 'CODEBOX_REGISTRY',
         helpText: 'the npm registry to proxy through to e.g. https://registry.npmjs.org/.',
       },
       {
-        name: 'YITH_BUCKET',
+        name: 'CODEBOX_BUCKET',
         helpText: 'the S3 bucket use for storage of your private packages.',
       },
       {
-        name: 'YITH_GITHUB_URL',
+        name: 'CODEBOX_GITHUB_URL',
         helpText: 'the GitHub / GitHub Enterprise API url, ensure this the root API url and not the website.',
       },
       {
-        name: 'YITH_GITHUB_CLIENT_ID',
+        name: 'CODEBOX_GITHUB_CLIENT_ID',
         helpText: 'the client id for your GitHub / GitHub Enterprise OAuth application.',
       },
       {
-        name: 'YITH_GITHUB_SECRET',
+        name: 'CODEBOX_GITHUB_SECRET',
         helpText: 'the secret for your GitHub / GitHub Enterprise OAuth application.',
       },
     ];
