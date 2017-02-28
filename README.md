@@ -89,7 +89,7 @@ Upon deploying codebox will create a new SNS Topic specifically for logging.  Th
 
 An example of using slack to log activity and errors can be found here:
 
-[https://github.com/craftship/codebox-log-slack](https://github.com/craftship/codebox-log-slack)
+[https://github.com/craftship/codebox-npm-log-slack](https://github.com/craftship/codebox-npm-log-slack)
 
 ## Other Resources
 
