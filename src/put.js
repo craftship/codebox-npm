@@ -68,7 +68,8 @@ export default async ({
 
   const tarballFilename = encodeURIComponent(versionData.dist.tarball.split('/-/')[1]);
   const tarballBaseUrl = versionData.dist.tarball.split('/registry/')[0];
-  versionData.dist.tarball = `${tarballBaseUrl}/registry/${pathParameters.name}/-/${tarballFilename}`;
+  const baseUrlParts = tarballBaseUrl.split(':');
+  versionData.dist.tarball = `https:${baseUrlParts[1]}/registry/${pathParameters.name}/-/${tarballFilename}`;
 
   let json = {};
 
