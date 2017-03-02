@@ -6,6 +6,7 @@ plugins:
   - serverless-webpack
   - log-topic
   - content-handling
+  - codebox-tools
 
 service: codebox-npm
 
