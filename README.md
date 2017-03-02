@@ -84,6 +84,13 @@ echo "$NPM_REGISTRY_LOGIN_URL:_authToken=$NPM_AUTH_TOKEN" >> .npmrc
 **Note:**
 You can then reuse this build step for all of your repositories using your private npm registry.
 
+## Custom Domain
+If you are happy with Codebox on the AWS domain you can setup a custom domain, instructions can be found on the AWS website [here](http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html).
+
+Once you have your custom domain setup you will need to ensure packages already published are migrated by running the following command (supply only the host of your custom domain):
+
+`serverless codebox domain --stage yourstage --host custom-domain.com`
+
 ## Logging
 Upon deploying codebox will create a new SNS Topic specifically for logging.  The console will log the SNS topic ARN you can use to create your own loggers using [Serverless](https://serverless.com/). Deploy your log functions into the same account and you can log with whatever tool you wish.  We hope to use this to drive a live web interface plotting npm usage within your company.
 
