@@ -7,7 +7,7 @@
 ## Overview
 Codebox npm is a serverless npm registry to allow companies that wish to keep their intellectual property. It allows sharing of npm modules within a company but additionally allows access to all of the modules on public npm. One other major difference is that it replaces `npm login` authentication to be via github / github enterprise.  Users are always required to be authenticated when using codebox as their npm registry.
 
-It is currently compatible with the latest version of the npm cli.
+It is currently compatible with the latest version of the npm & yarn cli.
 
 ## Local Deployment
 
@@ -44,9 +44,10 @@ This is especially great for repositories you wish developers to allow publishin
 
 ```
 registry=https://ab1cd3ef4.execute-api.eu-west-1.amazonaws.com/prod/registry
+always-auth=true
 ```
 
-If a user is doing any `npm` operation for the first time in the repository then they will need to `npm login`.
+If a user is doing any `npm` operation for the first time in the repository then they will need to `npm login`.  `always-auth=true` allows yarn to be supported in your project.
 
 ## `npm login` Usage
 Once you are using the private registry you are required to always be authenticated with npm. This ensures not just anyone can request private packages that are not to be shared with the outside world.
@@ -54,6 +55,13 @@ Once you are using the private registry you are required to always be authentica
 To login you can use the `npm login` cli command, if you have 2FA enabled you will need to (when prompted) enter the username in the format of your GitHub username.otp e.g. `jonsharratt.123456`. Once logged in it will store a long life token that will be used going forward.
 
 You are now able to use npm commands as normal.
+
+## `yarn login` Usage
+The best way to setup yarn authentication is to do an initial `npm login` so it can support a 2FA login if you have it enabled.
+
+Once done ensure you have a project based `.npmrc` config setup a per the "Using it in your Repositories" guide above.  The `always-auth=true` option ensures yarn will work with your `codebox-npm` registry.
+
+Yarn does not require an explicit `yarn login` as in this scenario it uses your `.npmrc` config instead.
 
 ## Admins / Publishing Packages
 `npm publish` works as it normally does via the npm CLI.  By default all users that authenticate have read only access.  If you wish to allow publish rights then you need to set the `CODEBOX_ADMINS` environment variable to a comma separated list of GitHub usernames such as `jonsharratt,kadikraman` and re-deploy.
