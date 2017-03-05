@@ -35,7 +35,13 @@ provider:
         - "sns:Publish"
       Resource:
         - "arn:aws:s3:::${self:provider.environment.bucket}*"
-        - "arn:aws:sns:${self:provider.region}:*:${self:service}-${opt:stage}-log"
+        - "Fn::Join":
+          - ""
+          - - "arn:aws:sns:"
+            - Ref: "AWS::Region"
+            - ":"
+            - Ref: "AWS::AccountId"
+            - ":${self:service}-${opt:stage}-log"
 
 functions:
   authorizerGithub:
