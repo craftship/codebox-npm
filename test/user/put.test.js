@@ -13,6 +13,7 @@ describe('PUT /registry/-/user/{id}', () => {
       githubClientId: 'foo-client-id',
       githubSecret: 'bar-secret',
       githubUrl: 'https://example.com',
+      restrictedOrgs: 'foo-org',
     };
 
     process.env = env;
