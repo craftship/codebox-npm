@@ -3,10 +3,25 @@ import AWS from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependenc
 import LogTopic from '../../../.serverless_plugins/log-topic';
 
 describe('Plugin: LogTopic', () => {
-  const createServerlessStub = (SNS, log) => ({
+  const createServerlessStub = (
+    SharedIniFileCredentials,
+    SNS,
+    log,
+  ) => ({
+    config: {
+      serverless: {
+        service: {
+          provider: {
+            profile: 'foo',
+          },
+        },
+      },
+    },
     getProvider: () => ({
       sdk: {
         SNS,
+        SharedIniFileCredentials,
+        config: {},
       },
     }),
     service: {
@@ -31,10 +46,14 @@ describe('Plugin: LogTopic', () => {
       let serverlessStub;
       let serverlessLogStub;
       let createTopicStub;
+      let fileCredentialsStub;
 
       beforeEach(() => {
         serverlessLogStub = stub();
+        fileCredentialsStub = stub();
+
         serverlessStub = createServerlessStub(
+          fileCredentialsStub,
           spy(() => {
             createTopicStub = stub().returns({
               promise: () => Promise.resolve({ TopicArn: 'foo-bar-arn' }),
@@ -47,6 +66,14 @@ describe('Plugin: LogTopic', () => {
           }), serverlessLogStub);
 
         subject = new LogTopic(serverlessStub);
+      });
+
+      it('should set credentials correctly', async () => {
+        await subject.beforeDeploy();
+
+        assert(fileCredentialsStub.calledWithExactly({
+          profile: 'foo',
+        }));
       });
 
       it('should create topic correctly', async () => {
@@ -84,6 +111,7 @@ describe('Plugin: LogTopic', () => {
       beforeEach(() => {
         serverlessLogStub = stub();
         serverlessStub = createServerlessStub(
+          stub(),
           spy(() => {
             createTopicStub = stub().returns({
               promise: () => Promise.reject(new Error('Create Failed')),

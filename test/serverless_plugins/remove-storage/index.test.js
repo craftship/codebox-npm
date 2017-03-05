@@ -3,10 +3,25 @@ import AWS from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependenc
 import RemoveStorageBucket from '../../../.serverless_plugins/remove-storage';
 
 describe('Plugin: RemoveStorageBucket', () => {
-  const createServerlessStub = (S3, log) => ({
+  const createServerlessStub = (
+    SharedIniFileCredentials,
+    S3,
+    log,
+  ) => ({
+    config: {
+      serverless: {
+        service: {
+          provider: {
+            profile: 'foo',
+          },
+        },
+      },
+    },
     getProvider: () => ({
       sdk: {
         S3,
+        SharedIniFileCredentials,
+        config: {},
       },
     }),
     cli: {
@@ -37,6 +52,7 @@ describe('Plugin: RemoveStorageBucket', () => {
       beforeEach(() => {
         serverlessLogStub = stub();
         serverlessStub = createServerlessStub(
+          stub(),
           spy(() => {
             deleteBucketStub = stub().returns({
               promise: () => Promise.resolve(),
@@ -87,10 +103,13 @@ describe('Plugin: RemoveStorageBucket', () => {
       let deleteBucketStub;
       let deleteObjectsStub;
       let listObjectsStub;
+      let fileCredentialsStub;
 
       beforeEach(() => {
         serverlessLogStub = stub();
+        fileCredentialsStub = stub();
         serverlessStub = createServerlessStub(
+          fileCredentialsStub,
           spy(() => {
             deleteBucketStub = stub().returns({
               promise: () => Promise.resolve(),
@@ -121,6 +140,14 @@ describe('Plugin: RemoveStorageBucket', () => {
           }), serverlessLogStub);
 
         subject = new RemoveStorageBucket(serverlessStub);
+      });
+
+      it('should set credentials correctly', async () => {
+        await subject.beforeRemove();
+
+        assert(fileCredentialsStub.calledWithExactly({
+          profile: 'foo',
+        }));
       });
 
       it('should list keys correctly', async () => {
@@ -172,6 +199,7 @@ describe('Plugin: RemoveStorageBucket', () => {
       beforeEach(() => {
         serverlessLogStub = stub();
         serverlessStub = createServerlessStub(
+          stub(),
           spy(() => {
             listObjectsStub = stub().returns({
               promise: () => Promise.reject(new Error('Removal Error')),
