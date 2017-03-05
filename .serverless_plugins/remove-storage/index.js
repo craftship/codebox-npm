@@ -2,9 +2,26 @@ class RemoveStorageBucket {
   constructor(serverless) {
     this.serverless = serverless;
     this.provider = this.serverless.getProvider('aws');
+
+    const profile = this.serverless
+    .config
+    .serverless
+    .service
+    .provider
+    .profile;
+
+    if (profile) {
+      const credentials = new this.provider.sdk.SharedIniFileCredentials({
+        profile,
+      });
+
+      this.provider.sdk.config.credentials = credentials;
+    }
+
     this.s3 = new this.provider.sdk.S3({
       signatureVersion: 'v4',
     });
+
     this.bucket = this.serverless.service.resources
       .Resources
       .PackageStorage
