@@ -8,6 +8,11 @@ export default async ({ body }, context, callback) => {
   } = JSON.parse(body);
 
   const scopes = ['user:email'];
+
+  if (process.env.restrictedOrgs) {
+    scopes.push('read:org');
+  }
+
   const nameParts = name.split('.');
   const username = nameParts[0];
   const otp = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';

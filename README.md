@@ -31,6 +31,7 @@ export CODEBOX_BUCKET="my-npm-registry-storage" # The name of the bucket in whic
 export CODEBOX_GITHUB_URL="https://api.github.com/" # The GitHub / GitHub Enterprise **api** url
 export CODEBOX_GITHUB_CLIENT_ID="client_id" # The client id for your GitHub application
 export CODEBOX_GITHUB_SECRET="secret" # The secret for your GitHub application
+export CODEBOX_RESTRICTED_ORGS="" # OPTIONAL: Comma seperated list of github organisations to only allow access to users in that org (e.g. "craftship,myorg").  Useful if using public GitHub for authentication, as by default all authenticated users would have access.
 ```
 * `serverless deploy --stage prod` (pick which ever stage you wish)
 * `npm set registry <url>` - `<url>` being the base url shown in the terminal after deployment completes, such as:

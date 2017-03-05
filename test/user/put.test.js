@@ -13,6 +13,7 @@ describe('PUT /registry/-/user/{id}', () => {
       githubClientId: 'foo-client-id',
       githubSecret: 'bar-secret',
       githubUrl: 'https://example.com',
+      restrictedOrgs: 'foo-org',
     };
 
     process.env = env;
@@ -65,7 +66,7 @@ describe('PUT /registry/-/user/{id}', () => {
         await subject(event, stub(), callback);
 
         assert(getCreateAuthStub.calledWithExactly({
-          scopes: ['user:email'],
+          scopes: ['user:email', 'read:org'],
           client_id: 'foo-client-id',
           client_secret: 'bar-secret',
           note: 'codebox private npm registry',
@@ -124,7 +125,7 @@ describe('PUT /registry/-/user/{id}', () => {
         await subject(event, stub(), callback);
 
         assert(getCreateAuthStub.calledWithExactly({
-          scopes: ['user:email'],
+          scopes: ['user:email', 'read:org'],
           client_id: 'foo-client-id',
           client_secret: 'bar-secret',
           note: 'codebox private npm registry',
@@ -213,7 +214,7 @@ describe('PUT /registry/-/user/{id}', () => {
         await subject(event, stub(), callback);
 
         assert(createAuthStub.calledWithExactly({
-          scopes: ['user:email'],
+          scopes: ['user:email', 'read:org'],
           client_id: 'foo-client-id',
           client_secret: 'bar-secret',
           note: 'codebox private npm registry',
@@ -227,7 +228,7 @@ describe('PUT /registry/-/user/{id}', () => {
         await subject(event, stub(), callback);
 
         assert(getCreateAuthStub.calledWithExactly({
-          scopes: ['user:email'],
+          scopes: ['user:email', 'read:org'],
           client_id: 'foo-client-id',
           client_secret: 'bar-secret',
           note: 'codebox private npm registry',

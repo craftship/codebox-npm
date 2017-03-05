@@ -17,6 +17,7 @@ provider:
   region: ${env:CODEBOX_REGION}
   environment:
     admins: ${env:CODEBOX_ADMINS}
+    restrictedOrgs: ${env:CODEBOX_RESTRICTED_ORGS}
     registry: ${env:CODEBOX_REGISTRY}
     githubUrl: ${env:CODEBOX_GITHUB_URL}
     githubClientId:  ${env:CODEBOX_GITHUB_CLIENT_ID}
