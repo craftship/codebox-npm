@@ -1,9 +1,25 @@
 class LogTopic {
-  constructor(serverless) {
+  constructor(serverless, options) {
     this.serverless = serverless;
+    this.provider = this.serverless.getProvider('aws');
+
+    const profile = this.serverless
+    .config
+    .serverless
+    .service
+    .provider
+    .profile;
+
+    if (profile) {
+      const credentials = new this.provider.sdk.SharedIniFileCredentials({
+        profile,
+      });
+
+      this.provider.sdk.config.credentials = credentials;
+    }
 
     this.topicName = `${this.serverless.service.service}-${this.serverless.processedInput.options.stage}-log`;
-    this.provider = this.serverless.getProvider('aws');
+
     this.sns = new this.provider.sdk.SNS({
       signatureVersion: 'v4',
       region: process.env.CODEBOX_REGION,
