@@ -13,7 +13,7 @@ service: codebox-npm
 provider:
   name: aws
   runtime: nodejs4.3
-  stage: dev
+  stage: ${opt:stage}
   region: ${env:CODEBOX_REGION}
   environment:
     admins: ${env:CODEBOX_ADMINS}
@@ -22,7 +22,7 @@ provider:
     githubUrl: ${env:CODEBOX_GITHUB_URL}
     githubClientId:  ${env:CODEBOX_GITHUB_CLIENT_ID}
     githubSecret:  ${env:CODEBOX_GITHUB_SECRET}
-    bucket: ${env:CODEBOX_BUCKET}-${opt:stage}
+    bucket: ${env:CODEBOX_BUCKET}-${self:provider.stage}
     region: ${self:provider.region}
   iamRoleStatements:
     - Effect: "Allow"
