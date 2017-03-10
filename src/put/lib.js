@@ -1,35 +1,14 @@
-import npm from './adapters/npm';
-import S3 from './adapters/s3';
-import Logger from './adapters/logger';
-
 export default async ({
   requestContext,
   pathParameters,
   body,
-}, context, callback) => {
-  const {
-    registry,
-    bucket,
-    region,
-    logTopic,
-  } = process.env;
-
-  const user = {
-    name: requestContext.authorizer.username,
-    avatar: requestContext.authorizer.avatar,
-  };
-
-  const log = new Logger(
-    'package:put', {
-      region,
-      topic: logTopic,
-    });
-
-  const storage = new S3({
-    region,
-    bucket,
-  });
-
+}, {
+  registry,
+  user,
+  storage,
+  npm,
+  log,
+}, callback) => {
   // Ensure package has unique name on npm
   try {
     const data = await npm.package(
