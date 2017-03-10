@@ -7,7 +7,7 @@ module.exports = {
   entry: {
     authorizerGithub: ['./bootstrap', './src/authorizers/github.js'],
     put: ['./bootstrap', './src/put.js'],
-    get: ['./bootstrap', './src/get.js'],
+    get: ['./bootstrap', './src/get/index.js'],
     distTagsGet: ['./bootstrap', './src/dist-tags/get.js'],
     distTagsPut: ['./bootstrap', './src/dist-tags/put.js'],
     distTagsDelete: ['./bootstrap', './src/dist-tags/delete.js'],
