@@ -4,7 +4,6 @@ plugins:
   - environment-variables
   - remove-storage
   - serverless-webpack
-  - log-topic
   - content-handling
   - codebox-tools
 
@@ -24,6 +23,9 @@ provider:
     githubSecret:  ${env:CODEBOX_GITHUB_SECRET}
     bucket: ${env:CODEBOX_BUCKET}-${opt:stage}
     region: ${self:provider.region}
+
+    clientId: ${env:CODEBOX_INSIGHTS_CLIENT_ID}
+    secret: ${env:CODEBOX_INSIGHTS_SECRET}
   iamRoleStatements:
     - Effect: "Allow"
       Action:

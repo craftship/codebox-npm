@@ -13,13 +13,23 @@ const storage = (region, bucket) =>
     bucket,
   });
 
-const log = (namespace, region, topic) =>
-  new Logger(
+const log = (namespace, region, topic) => {
+  if (process.env.clientId && process.env.secret) {
+    return new Logger(
+      namespace,
+      {
+        clientId: process.env.clientId,
+        secret: process.env.secret,
+      },
+    );
+  }
+
+  return new Logger(
     namespace, {
       region,
       topic,
-    },
-  );
+    });
+};
 
 export default (namespace, { authorizer }) => {
   const {

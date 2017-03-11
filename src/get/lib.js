@@ -12,6 +12,13 @@ export default async ({ pathParameters }, {
     const json = JSON.parse(pkgBuffer.toString());
     json._attachments = {}; // eslint-disable-line no-underscore-dangle
 
+    const version = json['dist-tags'].latest;
+
+    await log.info(user, {
+      name: json.name,
+      version,
+    });
+
     return callback(null, {
       statusCode: 200,
       body: JSON.stringify(json),
@@ -19,11 +26,18 @@ export default async ({ pathParameters }, {
   } catch (storageError) {
     if (storageError.code === 'NoSuchKey') {
       try {
-        const data = await npm.package(registry, pathParameters.name);
+        const json = await npm.package(registry, pathParameters.name);
+
+        const version = json['dist-tags'].latest;
+
+        await log.info(user, {
+          name: json.name,
+          version,
+        });
 
         return callback(null, {
           statusCode: 200,
-          body: JSON.stringify(data),
+          body: JSON.stringify(json),
         });
       } catch (npmError) {
         if (npmError.status === 500) {
