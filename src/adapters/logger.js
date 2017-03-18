@@ -1,6 +1,5 @@
 import fetch from 'node-fetch';
 
-
 export default class Logger {
   constructor(namespace, credentials = {}) {
     this.namespace = namespace;
@@ -16,8 +15,6 @@ export default class Logger {
         },
         body: JSON.stringify(json),
       });
-    } else {
-      console.log(JSON.stringify(json)); // eslint-disable-line
     }
   }
 

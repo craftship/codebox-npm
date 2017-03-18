@@ -1,12 +1,10 @@
 /* eslint-disable no-underscore-dangle */
-import AWS from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependencies
 import Subject from '../../src/adapters/logger';
 
 describe('Logger', () => {
   let user;
   let clock;
-  let awsSpy;
-  let publishStub;
+  let fetchStub;
 
   beforeEach(() => {
     user = {
@@ -14,43 +12,37 @@ describe('Logger', () => {
       avatar: 'https://example.com',
     };
 
-    awsSpy = {
-      SNS: spy(() => {
-        publishStub = stub().returns({ promise: () => Promise.resolve() });
-
-        const awsSNSInstance = createStubInstance(AWS.S3);
-        awsSNSInstance.publish = publishStub;
-
-        return awsSNSInstance;
-      }),
-    };
+    fetchStub = stub();
 
     clock = useFakeTimers();
 
-    Subject.__Rewire__('AWS', awsSpy);
+    Subject.__Rewire__('fetch', fetchStub);
   });
 
   describe('#info()', () => {
-    it('should call AWS with correct parameters', async () => {
+    it('should call insights logging endpoint  with correct parameters', async () => {
       const subject = new Subject('foo:bar', {
-        region: 'foo-region',
-        topic: 'bar-topic',
+        clientId: 'foo-client-id',
+        secret: 'bar-secret',
       });
 
       await subject.info(user, { foo: 'bar' });
 
-      assert(publishStub.calledWithExactly({
-        Message: '{"user":{"name":"foo","avatar":"https://example.com"},"timestamp":"1970-01-01T00:00:00.000Z","level":"info","namespace":"info:foo:bar","body":{"foo":"bar"}}',
-        TopicArn: 'bar-topic',
+      assert(fetchStub.calledWithExactly('https://log.codebox.sh/v1/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: '{"user":{"name":"foo","avatar":"https://example.com"},"credentials":{"clientId":"foo-client-id","secret":"bar-secret"},"timestamp":"1970-01-01T00:00:00.000Z","level":"info","namespace":"info:foo:bar","body":{"foo":"bar"}}',
       }));
     });
   });
 
   describe('#error()', () => {
-    it('should call AWS with correct parameters', async () => {
+    it('should call insights logging endpoint  with correct parameters', async () => {
       const subject = new Subject('foo:bar', {
-        region: 'foo-region',
-        topic: 'bar-topic',
+        clientId: 'foo-client-id',
+        secret: 'bar-secret',
       });
 
       const expectedError = new Error('Foo Bar');
@@ -58,15 +50,18 @@ describe('Logger', () => {
 
       await subject.error(user, expectedError);
 
-      assert(publishStub.calledWithExactly({
-        Message: '{"user":{"name":"foo","avatar":"https://example.com"},"timestamp":"1970-01-01T00:00:00.000Z","level":"error","namespace":"error:foo:bar","body":{"message":"Foo Bar","stack":"foo bar stack"}}',
-        TopicArn: 'bar-topic',
+      assert(fetchStub.calledWithExactly('https://log.codebox.sh/v1/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: '{"user":{"name":"foo","avatar":"https://example.com"},"credentials":{"clientId":"foo-client-id","secret":"bar-secret"},"timestamp":"1970-01-01T00:00:00.000Z","level":"error","namespace":"error:foo:bar","body":{"message":"Foo Bar","stack":"foo bar stack"}}',
       }));
     });
   });
 
   afterEach(() => {
     clock.restore();
-    Subject.__ResetDependency__('AWS');
+    Subject.__ResetDependency__('fetch');
   });
 });

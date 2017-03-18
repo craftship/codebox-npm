@@ -70,6 +70,7 @@ describe('GET /registry/{name}', () => {
         user: stub(),
         log: {
           error: stub(),
+          info: stub(),
         },
         npm: npmStub,
         storage: storageStub,
@@ -124,6 +125,7 @@ describe('GET /registry/{name}', () => {
         user: stub(),
         log: {
           error: stub(),
+          info: stub(),
         },
         npm: stub(),
         storage: storageStub,
