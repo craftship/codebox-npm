@@ -90,8 +90,15 @@ export default async ({
     );
 
     await log.info(user, {
-      name: json.name,
-      version: json['dist-tags'].latest,
+      name: versionData.name,
+      description: versionData.description,
+      version,
+      keywords: versionData.keywords,
+      license: versionData.license,
+      contributors: versionData.contributors,
+      dependencies: versionData.dependencies,
+      homepage: versionData.homepage,
+      repository: versionData.repository,
       'dist-tags': json['dist-tags'],
     });
 

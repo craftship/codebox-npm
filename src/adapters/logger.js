@@ -1,26 +1,27 @@
-import AWS from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependencies
+import fetch from 'node-fetch';
 
 export default class Logger {
-  constructor(namespace, { region, topic }) {
+  constructor(namespace, credentials = {}) {
     this.namespace = namespace;
-    this.topic = topic;
-
-    this.SNS = new AWS.SNS({
-      signatureVersion: 'v4',
-      region,
-    });
+    this.credentials = credentials;
   }
 
   async publish(json) {
-    return this.SNS.publish({
-      Message: JSON.stringify(json),
-      TopicArn: this.topic,
-    }).promise();
+    if (this.credentials.clientId && this.credentials.secret) {
+      await fetch('https://log.codebox.sh/v1/send', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(json),
+      });
+    }
   }
 
   async error(user, { stack, message }) {
     const json = {
       user,
+      credentials: this.credentials,
       timestamp: new Date(),
       level: 'error',
       namespace: `error:${this.namespace}`,
@@ -36,6 +37,7 @@ export default class Logger {
   async info(user, message) {
     const json = {
       user,
+      credentials: this.credentials,
       timestamp: new Date(),
       level: 'info',
       namespace: `info:${this.namespace}`,

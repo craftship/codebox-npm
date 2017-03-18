@@ -100,13 +100,6 @@ Once you have your custom domain setup you will need to ensure packages already 
 
 `serverless codebox domain --stage yourstage --host custom-domain.com`
 
-## Logging
-Upon deploying codebox will create a new SNS Topic specifically for logging.  The console will log the SNS topic ARN you can use to create your own loggers using [Serverless](https://serverless.com/). Deploy your log functions into the same account and you can log with whatever tool you wish.  We hope to use this to drive a live web interface plotting npm usage within your company.
-
-An example of using slack to log activity and errors can be found here:
-
-[https://github.com/craftship/codebox-npm-log-slack](https://github.com/craftship/codebox-npm-log-slack)
-
 ## Other Resources
 
 [Blog (Previously named Yith)](https://craftship.io/open/source/serverless/private/npm/registry/yith/2016/09/26/serverless-yith.html)
