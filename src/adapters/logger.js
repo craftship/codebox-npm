@@ -12,6 +12,7 @@ export default class Logger {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.credentials.clientId}:${this.credentials.secret}`,
         },
         body: JSON.stringify(json),
       });
@@ -21,7 +22,6 @@ export default class Logger {
   async error(user, { stack, message }) {
     const json = {
       user,
-      credentials: this.credentials,
       timestamp: new Date(),
       level: 'error',
       namespace: `error:${this.namespace}`,
@@ -37,7 +37,6 @@ export default class Logger {
   async info(user, message) {
     const json = {
       user,
-      credentials: this.credentials,
       timestamp: new Date(),
       level: 'info',
       namespace: `info:${this.namespace}`,
