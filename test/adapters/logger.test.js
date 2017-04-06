@@ -32,8 +32,9 @@ describe('Logger', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: 'Bearer foo-client-id:bar-secret',
         },
-        body: '{"user":{"name":"foo","avatar":"https://example.com"},"credentials":{"clientId":"foo-client-id","secret":"bar-secret"},"timestamp":"1970-01-01T00:00:00.000Z","level":"info","namespace":"info:foo:bar","body":{"foo":"bar"}}',
+        body: '{"user":{"name":"foo","avatar":"https://example.com"},"timestamp":"1970-01-01T00:00:00.000Z","level":"info","namespace":"info:foo:bar","body":{"foo":"bar"}}',
       }));
     });
   });
@@ -54,8 +55,9 @@ describe('Logger', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: 'Bearer foo-client-id:bar-secret',
         },
-        body: '{"user":{"name":"foo","avatar":"https://example.com"},"credentials":{"clientId":"foo-client-id","secret":"bar-secret"},"timestamp":"1970-01-01T00:00:00.000Z","level":"error","namespace":"error:foo:bar","body":{"message":"Foo Bar","stack":"foo bar stack"}}',
+        body: '{"user":{"name":"foo","avatar":"https://example.com"},"timestamp":"1970-01-01T00:00:00.000Z","level":"error","namespace":"error:foo:bar","body":{"message":"Foo Bar","stack":"foo bar stack"}}',
       }));
     });
   });
