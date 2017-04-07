@@ -1,7 +1,8 @@
 import fetch from 'node-fetch';
 
 export default class Logger {
-  constructor(namespace, credentials = {}) {
+  constructor(cmd, namespace, credentials = {}) {
+    this.command = cmd;
     this.namespace = namespace;
     this.credentials = credentials;
   }
@@ -25,6 +26,7 @@ export default class Logger {
       timestamp: new Date(),
       level: 'error',
       namespace: `error:${this.namespace}`,
+      command: this.command,
       body: {
         message,
         stack,
@@ -40,6 +42,7 @@ export default class Logger {
       timestamp: new Date(),
       level: 'info',
       namespace: `info:${this.namespace}`,
+      command: this.command,
       body: message,
     };
 
