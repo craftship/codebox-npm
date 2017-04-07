@@ -8,14 +8,13 @@ export default async ({
   storage,
   npm,
   log,
-  command,
 }, callback) => {
   const name = `${decodeURIComponent(pathParameters.name)}`;
 
   try {
     await storage.put(
       `${name}/index.json`,
-      body,
+      body.toString(),
     );
 
     return callback(null, {
