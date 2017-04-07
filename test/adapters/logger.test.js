@@ -21,7 +21,7 @@ describe('Logger', () => {
 
   describe('#info()', () => {
     it('should call insights logging endpoint  with correct parameters', async () => {
-      const subject = new Subject('foo:bar', {
+      const subject = new Subject({ name: 'foo', args: [] }, 'foo:bar', {
         clientId: 'foo-client-id',
         secret: 'bar-secret',
       });
@@ -34,14 +34,14 @@ describe('Logger', () => {
           'Content-Type': 'application/json',
           Authorization: 'Bearer foo-client-id:bar-secret',
         },
-        body: '{"user":{"name":"foo","avatar":"https://example.com"},"timestamp":"1970-01-01T00:00:00.000Z","level":"info","namespace":"info:foo:bar","body":{"foo":"bar"}}',
+        body: '{"user":{"name":"foo","avatar":"https://example.com"},"timestamp":"1970-01-01T00:00:00.000Z","level":"info","namespace":"info:foo:bar","command":{"name":"foo","args":[]},"body":{"foo":"bar"}}',
       }));
     });
   });
 
   describe('#error()', () => {
     it('should call insights logging endpoint  with correct parameters', async () => {
-      const subject = new Subject('foo:bar', {
+      const subject = new Subject({ name: 'foo', args: [] }, 'foo:bar', {
         clientId: 'foo-client-id',
         secret: 'bar-secret',
       });
@@ -57,7 +57,7 @@ describe('Logger', () => {
           'Content-Type': 'application/json',
           Authorization: 'Bearer foo-client-id:bar-secret',
         },
-        body: '{"user":{"name":"foo","avatar":"https://example.com"},"timestamp":"1970-01-01T00:00:00.000Z","level":"error","namespace":"error:foo:bar","body":{"message":"Foo Bar","stack":"foo bar stack"}}',
+        body: '{"user":{"name":"foo","avatar":"https://example.com"},"timestamp":"1970-01-01T00:00:00.000Z","level":"error","namespace":"error:foo:bar","command":{"name":"foo","args":[]},"body":{"message":"Foo Bar","stack":"foo bar stack"}}',
       }));
     });
   });

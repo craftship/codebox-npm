@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import pkg from '../fixtures/package';
 
-import subject from '../../src/put/lib';
+import subject from '../../src/put/publish';
 
 describe('PUT /registry/{name}', () => {
   let event;
