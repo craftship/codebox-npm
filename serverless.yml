@@ -15,6 +15,7 @@ provider:
   stage: ${opt:stage}
   region: ${env:CODEBOX_REGION}
   environment:
+    apiEndpoint: ${env:CODEBOX_HOST}/${opt:stage}/registry
     admins: ${env:CODEBOX_ADMINS}
     restrictedOrgs: ${env:CODEBOX_RESTRICTED_ORGS}
     registry: ${env:CODEBOX_REGISTRY}
@@ -22,6 +23,7 @@ provider:
     githubClientId:  ${env:CODEBOX_GITHUB_CLIENT_ID}
     githubSecret:  ${env:CODEBOX_GITHUB_SECRET}
     bucket: ${env:CODEBOX_BUCKET}-${self:provider.stage}
+    bucketCache: ${env:CODEBOX_BUCKET}-cache-${self:provider.stage}
     region: ${self:provider.region}
 
     clientId: ${env:CODEBOX_INSIGHTS_CLIENT_ID}
@@ -38,6 +40,7 @@ provider:
         - "sns:Publish"
       Resource:
         - "arn:aws:s3:::${self:provider.environment.bucket}*"
+        - "arn:aws:s3:::${self:provider.environment.bucketCache}*"
         - "Fn::Join":
           - ""
           - - "arn:aws:sns:"
@@ -49,6 +52,11 @@ provider:
 functions:
   authorizerGithub:
     handler: authorizerGithub.default
+  cache:
+    handler: cache.default
+    timeout: 300
+    events:
+      - schedule: rate(1 minute)
 
   put:
     handler: put.default
@@ -118,6 +126,11 @@ resources:
       Properties:
         AccessControl: Private
         BucketName: ${self:provider.environment.bucket}
+    PackageCacheStorage:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: Private
+        BucketName: ${self:provider.environment.bucketCache}
 
 custom:
   webpackIncludeModules: true

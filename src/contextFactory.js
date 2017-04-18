@@ -8,12 +8,19 @@ const user = authorizer => ({
 });
 
 const command = (headers) => {
-  const refererParts = headers.Referer.split(' ');
-  const name = refererParts[0];
+  if (headers.Referer) {
+    const refererParts = headers.Referer.split(' ');
+    const name = refererParts[0];
+
+    return {
+      name,
+      args: refererParts.slice(1),
+    };
+  }
 
   return {
-    name,
-    args: refererParts.slice(1),
+    name: 'Unknown',
+    args: [],
   };
 };
 
@@ -47,6 +54,7 @@ export default (namespace, { headers, requestContext }) => {
   const {
     registry,
     bucket,
+    bucketCache,
     region,
     logTopic,
   } = process.env;
@@ -58,6 +66,7 @@ export default (namespace, { headers, requestContext }) => {
     registry,
     user: user(requestContext.authorizer),
     storage: storage(region, bucket),
+    cache: storage(region, bucketCache),
     log: log(cmd, namespace, region, logTopic),
     npm,
   };
