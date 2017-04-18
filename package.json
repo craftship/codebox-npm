@@ -1,6 +1,6 @@
 {
   "name": "codebox-npm",
-  "version": "0.14.0",
+  "version": "0.16.1",
   "description": "Serverless private npm registry",
   "main": "index.js",
   "devDependencies": {
