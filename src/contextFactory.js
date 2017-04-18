@@ -8,12 +8,19 @@ const user = authorizer => ({
 });
 
 const command = (headers) => {
-  const refererParts = headers.Referer.split(' ');
-  const name = refererParts[0];
+  if (headers.Referer) {
+    const refererParts = headers.Referer.split(' ');
+    const name = refererParts[0];
+
+    return {
+      name,
+      args: refererParts.slice(1),
+    };
+  }
 
   return {
-    name,
-    args: refererParts.slice(1),
+    name: 'Unknown',
+    args: [],
   };
 };
 
