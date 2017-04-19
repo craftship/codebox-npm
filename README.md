@@ -11,7 +11,7 @@ It is currently compatible with the latest version of the npm & yarn cli.
 
 ## Local Deployment
 
-The quickest way to deploy your own npm registry from you local machine is to follow the following guide.
+The quickest way to deploy your own npm registry from your local machine is to follow the following guide.
 
 ### Prerequisites
 * A GitHub / GitHub Enterprise application is registered (e.g. [for GitHub](https://github.com/settings/developers)), you will need the `Client ID` and `Secret`.
