@@ -12,6 +12,7 @@ module.exports = {
     distTagsPut: ['./bootstrap', './src/dist-tags/put.js'],
     distTagsDelete: ['./bootstrap', './src/dist-tags/delete.js'],
     userPut: ['./bootstrap', './src/user/put.js'],
+    userDelete: ['./bootstrap', './src/user/delete.js'],
     tarGet: ['./bootstrap', './src/tar/get.js'],
   },
   output: {
