@@ -53,7 +53,9 @@ const log = (cmd, namespace, region, topic) => {
 export default (namespace, { headers, requestContext }) => {
   const {
     registry,
+    cacheEnabled,
     bucket,
+    bucketCache,
     region,
     logTopic,
   } = process.env;
@@ -62,9 +64,11 @@ export default (namespace, { headers, requestContext }) => {
 
   return {
     command: cmd,
+    cacheEnabled: (cacheEnabled && cacheEnabled === 'true'),
     registry,
     user: user(requestContext.authorizer),
     storage: storage(region, bucket),
+    cache: storage(region, bucketCache),
     log: log(cmd, namespace, region, logTopic),
     npm,
   };

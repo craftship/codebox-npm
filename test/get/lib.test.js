@@ -180,6 +180,132 @@ describe('GET /registry/{name}', () => {
     });
   });
 
+  context('cache enabled', () => {
+    let storageStub;
+    let cacheStub;
+
+    beforeEach(() => {
+      const getPackageStub = stub().returns(
+        pkg.withoutAttachments({
+          major: 1,
+          minor: 0,
+          patch: 0,
+        }));
+
+      cacheStub = {
+        get: getPackageStub,
+      };
+    });
+
+    it('should attempt to get package from cache', async () => {
+      await subject(event, {
+        registry: 'https://example.com',
+        user: stub(),
+        cacheEnabled: true,
+        cache: cacheStub,
+        log: {
+          error: stub(),
+        },
+        npm: stub(),
+        storage: stub(),
+      }, callback);
+
+      assert(cacheStub.get.calledWithExactly(
+        'foo-bar-package/index.json',
+      ));
+    });
+
+    context('package has not been cached and not a private package', () => {
+      beforeEach(() => {
+        const notInStorageErr = new Error('Not Found');
+        notInStorageErr.code = 'NoSuchKey';
+
+        const notInStorageStub = stub().throws(notInStorageErr);
+
+        cacheStub = {
+          get: notInStorageStub,
+          put: stub(),
+        };
+
+        storageStub = {
+          get: notInStorageStub,
+        };
+      });
+
+      it('should add package ready to be cached by schedule', async () => {
+        await subject(event, {
+          registry: 'https://example.com',
+          user: stub(),
+          cacheEnabled: true,
+          cache: cacheStub,
+          log: {
+            info: stub(),
+          },
+          npm: {
+            package: stub().returns(
+              JSON.parse(
+                pkg.withoutAttachments({
+                  major: 1,
+                  minor: 0,
+                  patch: 0,
+                }).toString())),
+          },
+          storage: storageStub,
+        }, callback);
+
+        assert(cacheStub.put.calledWithExactly(
+          'foo-bar-package/index.json',
+          pkg.withoutAttachments({
+            major: 1,
+            minor: 0,
+            patch: 0,
+            cached: false,
+          }).toString(),
+        ));
+      });
+    });
+
+    context('package has been cached', () => {
+      beforeEach(() => {
+        const getPackageStub = stub().returns(
+          pkg.withoutAttachments({
+            major: 1,
+            minor: 0,
+            patch: 0,
+            cached: true,
+          }));
+
+        cacheStub = {
+          get: getPackageStub,
+        };
+      });
+
+      it('should return package from cache', async () => {
+        await subject(event, {
+          registry: 'https://example.com',
+          user: stub(),
+          cacheEnabled: true,
+          cache: cacheStub,
+          log: {
+            error: stub(),
+          },
+          npm: stub(),
+          storage: stub(),
+        }, callback);
+
+        assert(callback.calledWithExactly(null, {
+          statusCode: 200,
+          body: pkg.withoutAttachments({
+            major: 1,
+            minor: 0,
+            patch: 0,
+            cached: true,
+          }).toString(),
+        }));
+      });
+    });
+  });
+
   context('storage get errors', () => {
     let storageStub;
 

@@ -25,4 +25,20 @@ export default class Storage {
 
     return meta.Body;
   }
+
+  async listAllKeys(token = null, keys = []) {
+    const data = await this.S3.listObjectsV2({
+      ContinuationToken: token,
+    })
+    .promise();
+
+    keys.push(data.Contents);
+
+    if (data.IsTruncated) {
+      return this.listAllKeys(data.NextContinuationToken, keys);
+    }
+
+    return [].concat(...keys).map(({ Key }) => Key);
+  }
 }
+
