@@ -65,6 +65,10 @@ export default async (event, {
         return callback(err);
       }
     }
+
+    return callback(null, {
+      status: 'OK',
+    });
   });
 
   return callback(null, {
