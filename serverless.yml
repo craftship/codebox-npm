@@ -102,6 +102,14 @@ functions:
           method: delete
           authorizer: authorizerGithub
 
+  whoamiGet:
+    handler: whoamiGet.default
+    events:
+      - http:
+          path: 'registry/-/whoami'
+          method: get
+          authorizer: authorizerGithub
+
   tarGet:
     handler: tarGet.default
     events:
