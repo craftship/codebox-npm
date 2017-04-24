@@ -94,6 +94,14 @@ functions:
           path: 'registry/-/user/{id}'
           method: put
 
+  userDelete:
+    handler: userDelete.default
+    events:
+      - http:
+          path: 'registry/-/user/token/{token}'
+          method: delete
+          authorizer: authorizerGithub
+
   tarGet:
     handler: tarGet.default
     events:
