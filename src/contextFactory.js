@@ -64,7 +64,7 @@ export default (namespace, { headers, requestContext }) => {
 
   return {
     command: cmd,
-    cacheEnabled: (cacheEnabled && cacheEnabled === 'true'),
+    cacheEnabled: (cacheEnabled === 'true'),
     registry,
     user: user(requestContext.authorizer),
     storage: storage(region, bucket),
