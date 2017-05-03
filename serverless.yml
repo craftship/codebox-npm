@@ -6,6 +6,7 @@ plugins:
   - serverless-webpack
   - content-handling
   - codebox-tools
+  - set-api-host
 
 service: codebox-npm
 
