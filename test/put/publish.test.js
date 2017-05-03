@@ -52,6 +52,7 @@ describe('PUT /registry/{name}', () => {
             patch: 0,
           }), {
             registry: 'https://example.com',
+            apiEndpoint: 'https://example.com/prod/registry',
             user: stub(),
             log: {
               info: stub(),
@@ -76,6 +77,7 @@ describe('PUT /registry/{name}', () => {
             patch: 0,
           }), {
             registry: 'https://example.com',
+            apiEndpoint: 'https://example.com/prod/registry',
             user: stub(),
             log: {
               error: stub(),
@@ -101,6 +103,7 @@ describe('PUT /registry/{name}', () => {
             patch: 0,
           }), {
             registry: 'https://example.com',
+            apiEndpoint: 'https://example.com/prod/registry',
             user: stub(),
             log: {
               info: stub(),
@@ -130,6 +133,7 @@ describe('PUT /registry/{name}', () => {
             patch: 0,
           }), {
             registry: 'https://example.com',
+            apiEndpoint: 'https://example.com/prod/registry',
             user: stub(),
             log: {
               info: stub(),
@@ -168,6 +172,7 @@ describe('PUT /registry/{name}', () => {
             patch: 0,
           }), {
             registry: 'https://example.com',
+            apiEndpoint: 'https://example.com/prod/registry',
             user: stub(),
             log: {
               info: stub(),
@@ -192,6 +197,7 @@ describe('PUT /registry/{name}', () => {
             patch: 0,
           }), {
             registry: 'https://example.com',
+            apiEndpoint: 'https://example.com/prod/registry',
             user: stub(),
             log: {
               error: stub(),
@@ -218,6 +224,7 @@ describe('PUT /registry/{name}', () => {
             patch: 0,
           }), {
             registry: 'https://example.com',
+            apiEndpoint: 'https://example.com/prod/registry',
             user: stub(),
             log: {
               error: stub(),
@@ -255,6 +262,7 @@ describe('PUT /registry/{name}', () => {
             patch: 0,
           }), {
             registry: 'https://example.com',
+            apiEndpoint: 'https://example.com/prod/registry',
             user: stub(),
             log: {
               error: stub(),
@@ -298,6 +306,7 @@ describe('PUT /registry/{name}', () => {
             patch: 0,
           }), {
             registry: 'https://example.com',
+            apiEndpoint: 'https://example.com/prod/registry',
             user: stub(),
             log: {
               error: stub(),
@@ -335,6 +344,7 @@ describe('PUT /registry/{name}', () => {
             patch: 0,
           }), {
             registry: 'https://example.com',
+            apiEndpoint: 'https://example.com/prod/registry',
             user: stub(),
             log: {
               error: stub(),

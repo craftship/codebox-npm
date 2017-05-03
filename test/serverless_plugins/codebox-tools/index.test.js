@@ -3,14 +3,22 @@ import AWS from 'aws-sdk'; // eslint-disable-line import/no-extraneous-dependenc
 import CodeboxTools from '../../../.serverless_plugins/codebox-tools';
 
 describe('Plugin: CodeboxTools', () => {
-  const createServerlessStub = (S3, log) => ({
+  const createServerlessStub = (S3, Lambda, log) => ({
     getProvider: () => ({
       sdk: {
         S3,
+        Lambda,
       },
     }),
     cli: {
       log,
+    },
+    config: {
+      serverless: {
+        service: {
+          service: 'foo-service',
+        },
+      },
     },
     service: {
       resources: {
@@ -24,6 +32,7 @@ describe('Plugin: CodeboxTools', () => {
       },
     },
   });
+
   describe('#index()', () => {
     context('has no keys', () => {
       let subject;
@@ -46,7 +55,7 @@ describe('Plugin: CodeboxTools', () => {
             awsS3Instance.listObjectsV2 = listObjectsStub;
 
             return awsS3Instance;
-          }), serverlessLogStub);
+          }), stub(), serverlessLogStub);
 
         subject = new CodeboxTools(serverlessStub, { host: 'bar' });
       });
@@ -96,7 +105,7 @@ describe('Plugin: CodeboxTools', () => {
             awsS3Instance.getObject = getObjectStub;
 
             return awsS3Instance;
-          }), serverlessLogStub);
+          }), stub(), serverlessLogStub);
 
         subject = new CodeboxTools(serverlessStub, { host: 'example.com' });
 
@@ -128,6 +137,7 @@ describe('Plugin: CodeboxTools', () => {
       let serverlessStub;
       let serverlessLogStub;
       let listObjectsStub;
+      let getFunctionConfigurationStub;
 
       beforeEach(() => {
         serverlessLogStub = stub();
@@ -144,9 +154,29 @@ describe('Plugin: CodeboxTools', () => {
             awsS3Instance.listObjectsV2 = listObjectsStub;
 
             return awsS3Instance;
+          }), spy(() => {
+            getFunctionConfigurationStub = stub().returns({
+              promise: () => Promise.resolve({
+                Environment: {
+                  Variables: {
+                    apiEndpoint: 'https://example.com/test/registry',
+                  },
+                },
+              }),
+            });
+
+            const updateFunctionConfigurationStub = stub().returns({
+              promise: () => Promise.resolve({}),
+            });
+
+            const lambdaInstance = createStubInstance(AWS.Lambda);
+            lambdaInstance.getFunctionConfiguration = getFunctionConfigurationStub;
+            lambdaInstance.updateFunctionConfiguration = updateFunctionConfigurationStub;
+
+            return lambdaInstance;
           }), serverlessLogStub);
 
-        subject = new CodeboxTools(serverlessStub, { host: 'bar' });
+        subject = new CodeboxTools(serverlessStub, { host: 'bar', stage: 'test' });
       });
 
       it('should request keys correctly', async () => {
@@ -166,6 +196,7 @@ describe('Plugin: CodeboxTools', () => {
       let putObjectStub;
       let listObjectsStub;
       let getObjectStub;
+      let getFunctionConfigurationStub;
 
       beforeEach(() => {
         serverlessLogStub = stub();
@@ -196,9 +227,33 @@ describe('Plugin: CodeboxTools', () => {
             awsS3Instance.getObject = getObjectStub;
 
             return awsS3Instance;
+          }), spy(() => {
+            getFunctionConfigurationStub = stub().returns({
+              promise: () => Promise.resolve({
+                Environment: {
+                  Variables: {
+                    apiEndpoint: 'https://example.com/test/registry',
+                  },
+                },
+              }),
+            });
+
+            const updateFunctionConfigurationStub = stub().returns({
+              promise: () => Promise.resolve({}),
+            });
+
+            const lambdaInstance = createStubInstance(AWS.Lambda);
+            lambdaInstance.getFunctionConfiguration = getFunctionConfigurationStub;
+            lambdaInstance.updateFunctionConfiguration = updateFunctionConfigurationStub;
+
+            return lambdaInstance;
           }), serverlessLogStub);
 
-        subject = new CodeboxTools(serverlessStub, { host: 'example.com' });
+        subject = new CodeboxTools(serverlessStub, {
+          host: 'example.com',
+          stage: 'test',
+          path: '/foo',
+        });
       });
 
       it('should store updated packages correctly', async () => {
@@ -239,7 +294,7 @@ describe('Plugin: CodeboxTools', () => {
             awsS3Instance.listObjectsV2 = listObjectsStub;
 
             return awsS3Instance;
-          }), serverlessLogStub);
+          }), stub(), serverlessLogStub);
 
         subject = new CodeboxTools(serverlessStub, { host: 'example.com' });
       });

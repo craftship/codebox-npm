@@ -56,6 +56,7 @@ export default (namespace, { headers, requestContext }) => {
     bucket,
     region,
     logTopic,
+    apiEndpoint,
   } = process.env;
 
   const cmd = command(headers);
@@ -63,6 +64,7 @@ export default (namespace, { headers, requestContext }) => {
   return {
     command: cmd,
     registry,
+    apiEndpoint,
     user: user(requestContext.authorizer),
     storage: storage(region, bucket),
     log: log(cmd, namespace, region, logTopic),

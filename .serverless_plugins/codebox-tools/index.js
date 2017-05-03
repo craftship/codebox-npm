@@ -193,9 +193,55 @@ class CodeboxTools {
       return Promise.all(putPromises);
     })
     .then(() => {
+      const lambda = new this.provider.sdk.Lambda({
+        signatureVersion: 'v4',
+        region: process.env.CODEBOX_REGION,
+      });
+
+      const serviceName = this.serverless.config.serverless.service.service;
+      const stage = this.options.stage;
+
+      const deployedName = `${serviceName}-${stage}-put`;
+
+      const params = {
+        FunctionName: deployedName,
+      };
+
+      return lambda
+      .getFunctionConfiguration(params)
+      .promise()
+      .then((config) => {
+        const env = config.Environment;
+        const currentEndpoint = env.Variables.apiEndpoint;
+
+        if (!currentEndpoint) {
+          throw new Error('Please ensure you are on Codebox npm 0.20.0 or higher.');
+        }
+
+        let endpoint = currentEndpoint.replace(currentEndpoint.split('/')[2], this.options.host);
+        if (this.options.path) {
+          endpoint = `${endpoint}${this.options.path}`
+        }
+
+        env.Variables = Object.assign({}, env.Variables, {
+          apiEndpoint: endpoint,
+        });
+
+        const updatedConfig = {
+          FunctionName: deployedName,
+          Environment: env,
+        };
+
+        return lambda
+        .updateFunctionConfiguration(updatedConfig)
+        .promise();
+      });
+    })
+    .then(() => {
       this.serverless.cli.log(`Domain updated for ${this.options.host}`);
     })
     .catch((err) => {
+      console.log(err);
       this.serverless.cli.log(`Domain update failed for ${this.options.host}`);
       this.serverless.cli.log(err.message);
     });
