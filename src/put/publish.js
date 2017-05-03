@@ -4,6 +4,7 @@ export default async ({
   body,
 }, {
   registry,
+  apiEndpoint,
   user,
   storage,
   npm,
@@ -46,9 +47,7 @@ export default async ({
   const versionData = pkg.versions[version];
 
   const tarballFilename = encodeURIComponent(versionData.dist.tarball.split('/-/')[1]);
-  const tarballBaseUrl = versionData.dist.tarball.split('/registry/')[0];
-  const baseUrlParts = tarballBaseUrl.split(':');
-  versionData.dist.tarball = `https:${baseUrlParts[1]}/registry/${pathParameters.name}/-/${tarballFilename}`;
+  versionData.dist.tarball = `${apiEndpoint}/${pathParameters.name}/-/${tarballFilename}`;
 
   let json = {};
 

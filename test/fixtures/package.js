@@ -16,7 +16,7 @@ export default {
           version: `${major}.${minor}.${patch}`,
           deprecated: msg,
           dist: {
-            tarball: `https://example.com/registry/foo-bar-package/-/foo-bar-package-${major}.${minor}.${patch}.tgz`,
+            tarball: `https://example.com/prod/registry/foo-bar-package/-/foo-bar-package-${major}.${minor}.${patch}.tgz`,
           },
         },
       },
@@ -43,7 +43,7 @@ export default {
           name: 'foo-bar-package',
           version: `${major}.${minor}.${patch}`,
           dist: {
-            tarball: `https://example.com/registry/foo-bar-package/-/foo-bar-package-${major}.${minor}.${patch}.tgz`,
+            tarball: `https://example.com/prod/registry/foo-bar-package/-/foo-bar-package-${major}.${minor}.${patch}.tgz`,
           },
         },
       },
@@ -70,7 +70,7 @@ export default {
           name: 'foo-bar-package',
           version: `${major}.${minor}.${patch}`,
           dist: {
-            tarball: `https://example.com/registry/foo-bar-package/-/foo-bar-package-${major}.${minor}.${patch}.tgz`,
+            tarball: `https://example.com/prod/registry/foo-bar-package/-/foo-bar-package-${major}.${minor}.${patch}.tgz`,
           },
         },
       },
