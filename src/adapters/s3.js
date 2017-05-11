@@ -15,6 +15,7 @@ export default class Storage {
     return this.S3.putObject({
       Key: key,
       Body: encoding === 'base64' ? new Buffer(data, 'base64') : data,
+      ServerSideEncryption: 'AES256',
     }).promise();
   }
 

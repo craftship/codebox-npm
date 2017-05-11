@@ -37,6 +37,7 @@ describe('S3', () => {
         assert(putObjectStub.calledWithExactly({
           Key: 'foo-key',
           Body: new Buffer('test', 'base64'),
+          ServerSideEncryption: 'AES256',
         }));
       });
     });
@@ -53,6 +54,7 @@ describe('S3', () => {
         assert(putObjectStub.calledWithExactly({
           Key: 'foo-key',
           Body: 'test',
+          ServerSideEncryption: 'AES256',
         }));
       });
     });

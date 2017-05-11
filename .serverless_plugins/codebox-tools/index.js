@@ -32,6 +32,12 @@ class CodeboxTools {
               },
             },
           },
+          encrypt: {
+            usage: 'Re-encrypts all files within package storage.',
+            lifecycleEvents: [
+              'encrypt',
+            ],
+          },
           index: {
             usage: 'Re-indexes all packages into Codebox Insights, license required.',
             lifecycleEvents: [
@@ -57,6 +63,7 @@ class CodeboxTools {
     this.hooks = {
       'codebox:domain:migrate': () => this.migrate(),
       'codebox:index:index': () => this.index(),
+      'codebox:encrypt:encrypt': () => this.encrypt(),
     };
   }
 
@@ -70,20 +77,18 @@ class CodeboxTools {
       const objectPromises = [];
 
       data.Contents.forEach((item) => {
-        if (item.Key.indexOf('index.json') > -1) {
-          objectPromises.push(
-            new Promise((resolve, reject) => {
-              this.s3.getObject({
-                Bucket: this.bucket,
-                Key: item.Key,
-              }).promise().then((obj) => {
-                resolve({
-                  key: item.Key,
-                  json: JSON.parse(obj.Body.toString()),
-                });
-              }).catch(reject);
-            }));
-        }
+        objectPromises.push(
+          new Promise((resolve, reject) => {
+            this.s3.getObject({
+              Bucket: this.bucket,
+              Key: item.Key,
+            }).promise().then((obj) => {
+              resolve({
+                key: item.Key,
+                data: obj.Body,
+              });
+            }).catch(reject);
+          }));
       });
 
       if (data.IsTruncated) {
@@ -94,13 +99,40 @@ class CodeboxTools {
     });
   }
 
+  encrypt() {
+    const putPromises = [];
+
+    this._getObjects()
+    .then((items) => {
+      items.forEach((item) => {
+        putPromises.push(
+          this.s3.putObject({
+            Bucket: this.bucket,
+            Key: item.key,
+            Body: item.data,
+            ServerSideEncryption: 'AES256',
+          }).promise());
+      });
+    }).then(() => {
+      return Promise.all(putPromises)
+      .then(() => this.serverless.cli.log('Encrypted all current files for registry'))
+      .catch(err => this.serverless.cli.log(`Failed file encryption migration ${err.message}`));
+    });
+  }
+
   index() {
     return this._getObjects()
     .then((items) => {
       const fetchPromises = [];
 
       items.forEach((item) => {
-        const version = item.json.versions[
+        if (item.Key.indexOf('index.json') === -1) {
+          return;
+        }
+
+        const json = JSON.parse(item.data.toString());
+
+        const version = json.versions[
           item.json['dist-tags'].latest
         ];
 
@@ -114,7 +146,7 @@ class CodeboxTools {
           dependencies: version.dependencies,
           homepage: version.homepage,
           repository: version.repository,
-          'dist-tags': item.json['dist-tags'],
+          'dist-tags': json['dist-tags'],
         };
 
         const reqBody = JSON.stringify({
