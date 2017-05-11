@@ -28,15 +28,21 @@ class RemoveStorageBucket {
       .Properties
       .BucketName;
 
+    this.bucketCache = this.serverless.service.resources
+      .Resources
+      .PackageCacheStorage
+      .Properties
+      .BucketName;
+
     this.hooks = {
       'before:remove:remove': this.beforeRemove.bind(this),
     };
   }
 
-  listAllKeys(token) {
+  listAllKeys(bucket, token) {
     const allKeys = [];
     return this.s3.listObjectsV2({
-      Bucket: this.bucket,
+      Bucket: bucket,
       ContinuationToken: token,
     })
     .promise()
@@ -44,7 +50,7 @@ class RemoveStorageBucket {
       allKeys.push(data.Contents);
 
       if (data.IsTruncated) {
-        return this.listAllKeys(data.NextContinuationToken);
+        return this.listAllKeys(bucket, data.NextContinuationToken);
       }
 
       return [].concat(...allKeys).map(({ Key }) => ({ Key }));
@@ -53,19 +59,40 @@ class RemoveStorageBucket {
 
   beforeRemove() {
     return new Promise((resolve, reject) => {
-      return this.listAllKeys()
+      this.listAllKeys(this.bucketCache)
       .then((keys) => {
         if (keys.length > 0) {
           return this.s3
           .deleteObjects({
-            Bucket: this.bucket,
+            Bucket: this.bucketCache,
             Delete: {
               Objects: keys,
             },
           }).promise();
         }
-
-        return true;
+      })
+      .then(() => {
+        return this.s3
+          .deleteBucket({
+            Bucket: this.bucketCache,
+          }).promise()
+          .then(() => {
+            this.serverless.cli.log('AWS Package Storage Cache Removed');
+          });
+      })
+      .then(() => {
+        return this.listAllKeys(this.bucket)
+        .then((keys) => {
+          if (keys.length > 0) {
+            return this.s3
+            .deleteObjects({
+              Bucket: this.bucket,
+              Delete: {
+                Objects: keys,
+              },
+            }).promise();
+          }
+        })
       })
       .then(() => {
         return this.s3

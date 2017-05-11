@@ -35,6 +35,11 @@ describe('Plugin: RemoveStorageBucket', () => {
               BucketName: 'foo-bucket',
             },
           },
+          PackageCacheStorage: {
+            Properties: {
+              BucketName: 'foo-bucket-cache',
+            },
+          },
         },
       },
     },

@@ -32,6 +32,7 @@ export CODEBOX_GITHUB_URL="https://api.github.com/" # The GitHub / GitHub Enterp
 export CODEBOX_GITHUB_CLIENT_ID="client_id" # The client id for your GitHub application
 export CODEBOX_GITHUB_SECRET="secret" # The secret for your GitHub application
 export CODEBOX_RESTRICTED_ORGS="" # OPTIONAL: Comma seperated list of github organisations to only allow access to users in that org (e.g. "craftship,myorg").  Useful if using public GitHub for authentication, as by default all authenticated users would have access.
+export CODEBOX_CACHE="false" # OPTIONAL: Any npm install will cache dependencies from public registry in a separate S3 bucket
 ```
 * `serverless deploy --stage prod` (pick which ever stage you wish)
 * `npm set registry <url>` - `<url>` being the base url shown in the terminal after deployment completes, such as:
@@ -63,6 +64,11 @@ The best way to setup yarn authentication is to do an initial `npm login` so it 
 Once done ensure you have a project based `.npmrc` config setup a per the "Using it in your Repositories" guide above.  The `always-auth=true` option ensures yarn will work with your `codebox-npm` registry.
 
 Yarn does not require an explicit `yarn login` as in this scenario it uses your `.npmrc` config instead.
+
+## Caching
+If you enable `CODEBOX_CACHE="true"` when using the registry all requests to packages that hit the public registry will then be cached.  This allows you to have a cache / mirror of all dependencies in your project.  Helps with robust deployments and better response times when hosting your CI in the same region as your Codebox npm registry.
+
+**NOTE: Your AWS bill will rise due to this scheduled task ensuring that cached dependnecies are up to date.**
 
 ## Admins / Publishing Packages
 `npm publish` works as it normally does via the npm CLI.  By default all users that authenticate have read only access.  If you wish to allow publish rights then you need to set the `CODEBOX_ADMINS` environment variable to a comma separated list of GitHub usernames such as `jonsharratt,kadikraman` and re-deploy.

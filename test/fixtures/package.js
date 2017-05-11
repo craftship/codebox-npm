@@ -3,6 +3,7 @@ export default {
     major,
     minor,
     patch,
+    cached = false,
   }) => new Buffer(
     JSON.stringify({
       _id: 'foo-bar-package',
@@ -25,12 +26,16 @@ export default {
           data: 'foo-package-data',
         },
       },
+      _codebox: {
+        cached,
+      },
     }),
   ),
   withAttachments: ({
     major,
     minor,
     patch,
+    cached = false,
   }) => new Buffer(
     JSON.stringify({
       _id: 'foo-bar-package',
@@ -52,12 +57,16 @@ export default {
           data: 'foo-package-data',
         },
       },
+      _codebox: {
+        cached,
+      },
     }),
   ),
   withoutAttachments: ({
     major,
     minor,
     patch,
+    cached = false,
   }) => new Buffer(
     JSON.stringify({
       _id: 'foo-bar-package',
@@ -75,6 +84,9 @@ export default {
         },
       },
       _attachments: {},
+      _codebox: {
+        cached,
+      },
     }),
   ),
 };
