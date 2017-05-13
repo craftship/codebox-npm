@@ -100,10 +100,10 @@ class CodeboxTools {
   }
 
   encrypt() {
-    const putPromises = [];
-
-    this._getObjects()
+    return this._getObjects()
     .then((items) => {
+      const putPromises = [];
+
       items.forEach((item) => {
         putPromises.push(
           this.s3.putObject({
@@ -113,10 +113,14 @@ class CodeboxTools {
             ServerSideEncryption: 'AES256',
           }).promise());
       });
-    }).then(() => {
-      return Promise.all(putPromises)
+
+      return putPromises;
+    }).then((promises) => {
+      return Promise.all(promises)
       .then(() => this.serverless.cli.log('Encrypted all current files for registry'))
-      .catch(err => this.serverless.cli.log(`Failed file encryption migration ${err.message}`));
+    })
+    .catch(err => {
+      this.serverless.cli.log(`Failed file encryption migration ${err.message}`)
     });
   }
 
@@ -126,14 +130,14 @@ class CodeboxTools {
       const fetchPromises = [];
 
       items.forEach((item) => {
-        if (item.Key.indexOf('index.json') === -1) {
+        if (item.key.indexOf('index.json') === -1) {
           return;
         }
 
         const json = JSON.parse(item.data.toString());
 
         const version = json.versions[
-          item.json['dist-tags'].latest
+          json['dist-tags'].latest
         ];
 
         const logBody = {
@@ -197,10 +201,15 @@ class CodeboxTools {
       const putPromises = [];
 
       items.forEach((item) => {
-        const newItem = Object.assign({}, item);
+        if (item.key.indexOf('index.json') === -1) {
+          return;
+        }
 
-        Object.keys(item.json.versions).forEach((name) => {
-          const version = item.json.versions[name];
+        const newItem = Object.assign({}, item);
+        const json = JSON.parse(newItem.data.toString());
+
+        Object.keys(json.versions).forEach((name) => {
+          const version = json.versions[name];
 
           if (version.dist && version.dist.tarball) {
             const currentHost = version.dist.tarball.split('/')[2];
@@ -210,7 +219,7 @@ class CodeboxTools {
               .replace(currentHost, this.options.host)
               .replace(currentProtocol, 'https:');
 
-            newItem.json.versions[name] = version;
+            json.versions[name] = version;
           }
         });
 
@@ -218,7 +227,7 @@ class CodeboxTools {
           this.s3.putObject({
             Bucket: this.bucket,
             Key: newItem.key,
-            Body: JSON.stringify(newItem.json),
+            Body: JSON.stringify(json),
           }).promise());
       });
 
@@ -273,7 +282,6 @@ class CodeboxTools {
       this.serverless.cli.log(`Domain updated for ${this.options.host}`);
     })
     .catch((err) => {
-      console.log(err);
       this.serverless.cli.log(`Domain update failed for ${this.options.host}`);
       this.serverless.cli.log(err.message);
     });
