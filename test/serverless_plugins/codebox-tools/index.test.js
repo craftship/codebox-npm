@@ -130,6 +130,102 @@ describe('Plugin: CodeboxTools', () => {
       });
     });
   });
+  describe('#encrypt()', () => {
+    context('keys', () => {
+      let subject;
+      let serverlessStub;
+      let serverlessLogStub;
+      let putObjectStub;
+      let listObjectsStub;
+      let getObjectStub;
+      let mockData;
+
+      beforeEach(() => {
+        mockData = new Buffer('{"versions":{"1.0.0":{"name":"foo", "dist":{"tarball":"http://old-host/registry/foo/-/bar-1.0.0.tgz"}}}}');
+        serverlessLogStub = stub();
+        serverlessStub = createServerlessStub(
+          spy(() => {
+            putObjectStub = stub().returns({
+              promise: () => Promise.resolve(),
+            });
+
+            listObjectsStub = stub().returns({
+              promise: () => Promise.resolve({
+                IsTruncated: false,
+                Contents: [{
+                  Key: 'foo/index.json',
+                }],
+              }),
+            });
+
+            getObjectStub = stub().returns({
+              promise: () => Promise.resolve({
+                Body: mockData,
+              }),
+            });
+
+            const awsS3Instance = createStubInstance(AWS.S3);
+            awsS3Instance.listObjectsV2 = listObjectsStub;
+            awsS3Instance.putObject = putObjectStub;
+            awsS3Instance.getObject = getObjectStub;
+
+            return awsS3Instance;
+          }),
+          stub(),
+          serverlessLogStub,
+        );
+
+        subject = new CodeboxTools(serverlessStub, {
+          host: 'example.com',
+          stage: 'test',
+          path: '/foo',
+        });
+      });
+
+      it('should store packages encrypted correctly', async () => {
+        await subject.encrypt();
+
+        assert(putObjectStub.calledWithExactly({
+          Bucket: 'foo-bucket',
+          Key: 'foo/index.json',
+          Body: mockData,
+          ServerSideEncryption: 'AES256',
+        }));
+      });
+    });
+
+    context('error', () => {
+      let subject;
+      let serverlessStub;
+      let serverlessLogStub;
+      let listObjectsStub;
+
+      beforeEach(() => {
+        serverlessLogStub = stub();
+        serverlessStub = createServerlessStub(
+          spy(() => {
+            listObjectsStub = stub().returns({
+              promise: () => Promise.reject(new Error('Foo')),
+            });
+
+            const awsS3Instance = createStubInstance(AWS.S3);
+            awsS3Instance.listObjectsV2 = listObjectsStub;
+
+            return awsS3Instance;
+          }), stub(), serverlessLogStub);
+
+        subject = new CodeboxTools(serverlessStub, { host: 'example.com' });
+      });
+
+      it('should log error correctly', async () => {
+        try {
+          await subject.encrypt();
+        } catch (err) {
+          assert(serverlessLogStub.calledWithExactly('Failed file encryption migration Foo'));
+        }
+      });
+    });
+  });
 
   describe('#migrate()', () => {
     context('has no keys', () => {
