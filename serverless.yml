@@ -15,6 +15,7 @@ provider:
   runtime: nodejs6.10
   stage: ${opt:stage}
   region: ${env:CODEBOX_REGION}
+  versionFunctions: false
   environment:
     admins: ${env:CODEBOX_ADMINS}
     restrictedOrgs: ${env:CODEBOX_RESTRICTED_ORGS}
