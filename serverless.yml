@@ -20,8 +20,8 @@ provider:
     restrictedOrgs: ${env:CODEBOX_RESTRICTED_ORGS}
     registry: ${env:CODEBOX_REGISTRY}
     githubUrl: ${env:CODEBOX_GITHUB_URL}
-    githubClientId:  ${env:CODEBOX_GITHUB_CLIENT_ID}
-    githubSecret:  ${env:CODEBOX_GITHUB_SECRET}
+    githubClientId: ${env:CODEBOX_GITHUB_CLIENT_ID}
+    githubSecret: ${env:CODEBOX_GITHUB_SECRET}
     bucket: ${env:CODEBOX_BUCKET}-${self:provider.stage}
     region: ${self:provider.region}
 
