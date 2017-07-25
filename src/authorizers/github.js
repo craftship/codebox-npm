@@ -112,7 +112,8 @@ export default async ({ methodArn, authorizationToken }, context, callback) => {
     }
 
     if (process.env.admins) {
-      isAdmin = process.env.admins.split(',').indexOf(user.login) > -1;
+      let login = user.login.toLowerCase();
+      isAdmin = process.env.admins.toLowerCase().split(',').indexOf(login) > -1;
     }
 
     const policy = generatePolicy({
