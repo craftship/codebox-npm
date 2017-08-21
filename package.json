@@ -4,8 +4,8 @@
   "description": "Serverless private npm registry",
   "main": "index.js",
   "engines": {
-    "node": "8.1.0",
-    "npm": "5.0.3"
+    "node": "8.4.0",
+    "npm": "5.3.0"
   },
   "devDependencies": {
     "aws-sdk": "^2.7.10",
