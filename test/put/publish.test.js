@@ -240,11 +240,10 @@ describe('PUT /registry/{name}', () => {
         const pkg2 = JSON.parse(pkg.withAttachments({ major: 2, minor: 0, patch: 0 }).toString());
 
         const versions = Object.assign(pkg1.versions, pkg2.versions);
-        const attachments = Object.assign(pkg1._attachments, pkg2._attachments);
 
         const updatedPackage = Object.assign({}, pkg1, pkg2);
         updatedPackage.versions = versions;
-        updatedPackage._attachments = attachments;
+        updatedPackage._attachments = pkg2._attachments;
 
         const expected = JSON.stringify(updatedPackage);
 
