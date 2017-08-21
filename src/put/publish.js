@@ -66,6 +66,7 @@ export default async ({
     }
 
     json['dist-tags'][tag] = version;
+    json._attachments = {}; // eslint-disable-line no-underscore-dangle
     json._attachments[`${name}-${version}.tgz`] = pkg._attachments[`${name}-${version}.tgz`]; // eslint-disable-line no-underscore-dangle
     json.versions[version] = versionData;
   } catch (storageError) {
