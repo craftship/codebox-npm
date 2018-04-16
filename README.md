@@ -19,7 +19,7 @@ The quickest way to deploy your own npm registry from your local machine is to f
 * Latest version of Serverless installed globally (`npm install serverless -g` or `yarn global add serverless`).
 
 #### Steps
-* `serverless install --url https://github.com/craftship/codebox-npm/tree/0.21.0 --name my-npm-registry` - pick whichever name you prefer for your registry
+* `serverless install --url https://github.com/craftship/codebox-npm/tree/0.21.2 --name my-npm-registry` - pick whichever name you prefer for your registry
 * `cd my-npm-registry`
 * `npm install`
 * Setup your environment variables:
