@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import GitHub from 'github';
+import GitHub from '@octokit/rest';
 import subject from '../../src/user/delete';
 
 describe('DELETE /registry/-/user/token/{token}', () => {
