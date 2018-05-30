@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import GitHub from 'github';
+import GitHub from '@octokit/rest';
 import subject from '../../src/user/put';
 
 describe('PUT /registry/-/user/{id}', () => {

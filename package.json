@@ -50,9 +50,9 @@
   },
   "homepage": "https://github.com/craftship/codebox-npm#readme",
   "dependencies": {
+    "@octokit/rest": "^15.8.1",
     "babel-polyfill": "^6.22.0",
     "babel-runtime": "^6.22.0",
-    "github": "^8.1.1",
     "node-fetch": "^1.6.3"
   }
 }
