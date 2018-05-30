@@ -1,5 +1,5 @@
 import url from 'url';
-import GitHub from 'github';
+import GitHub from '@octokit/rest';
 
 export default async ({ body }, context, callback) => {
   const {

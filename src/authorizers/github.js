@@ -1,5 +1,5 @@
 import url from 'url';
-import GitHub from 'github';
+import GitHub from '@octokit/rest';
 
 const generatePolicy = ({
   effect,
