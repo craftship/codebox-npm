@@ -415,7 +415,7 @@ describe('GitHub Authorizer', () => {
           authStub = stub();
           checkAuthStub = stub().returns({
             user: {
-              login: 'foo-user',
+              login: 'Foo-User',
               avatar_url: 'https://example.com',
             },
             created_at: '2001-01-01T00:00:00Z',
@@ -480,7 +480,7 @@ describe('GitHub Authorizer', () => {
             ],
           },
           context: {
-            username: 'foo-user',
+            username: 'Foo-User',
             avatar: 'https://example.com',
             createdAt: '2001-01-01T00:00:00Z',
             updatedAt: '2001-02-01T00:00:00Z',
