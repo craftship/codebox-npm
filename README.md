@@ -94,7 +94,7 @@ echo "$NPM_REGISTRY_LOGIN_URL:_authToken=$NPM_AUTH_TOKEN" >> .npmrc
 You can then reuse this build step for all of your repositories using your private npm registry.
 
 ## Custom Domain
-If you are happy with Codebox on the AWS domain and wish to move it to a custom domain, instructions can be found on the AWS website [here](http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html).
+If you are not happy with Codebox on the AWS domain and wish to move it to a custom domain, instructions can be found on the AWS website [here](http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html).
 
 Once you have your custom domain setup you will need to ensure packages already published are migrated by running the following command (supply only the host of your custom domain):
 
